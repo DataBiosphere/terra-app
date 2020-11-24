@@ -1,0 +1,9 @@
+version: 0.1.0
+cirrocumulus:
+  name: Cirrocumulus for Single-Cell Data Visualization
+  author: cirrocumulus@broadinstitute.org
+  description: |
+    Cirrocumulus is an interactive visualization tool for large-scale single-cell genomics data.
+  image: "cumulusprod/cirrocumulus:latest"
+  port: 5000
+  command:  ["cirro", "launch", "/data/dataset1.h5ad", "--host", "0.0.0.0"]
