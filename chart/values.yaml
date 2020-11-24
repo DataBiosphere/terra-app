@@ -1,16 +1,10 @@
 replicaCount: 1
 
 image:
-#  repository: cumulusprod/cirrocumulus
-#  tag: "latest"
+#  image: "cumulusprod/cirrocumulus:latest"
 #  port: 5000
 #  command: ["cirro"]
 #  args: ["launch", "/data/dataset1.h5ad", "--host", "0.0.0.0"]
-  repository: "us.gcr.io/broad-dsp-gcr-public/cellxgene"
-  tag: "latest"
-  port: 5005
-  command: ["cellxgene"]
-  args: ["launch", "--host", "0.0.0.0", "https://cellxgene-example-data.czi.technology/pbmc3k.h5ad"]
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
