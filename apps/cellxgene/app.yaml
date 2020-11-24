@@ -1,0 +1,7 @@
+version: 0.1.0
+cellxgene:
+  name: cellxgene
+  author: chanzuckerberg
+  description: An interactive explorer for single-cell transcriptomics data
+  image: "us.gcr.io/broad-dsp-gcr-public/cellxgene:latest"
+  command: ["cellxgene", "launch", "--host", "0.0.0.0", "https://cellxgene-example-data.czi.technology/pbmc3k.h5ad"]
