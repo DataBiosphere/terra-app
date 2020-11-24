@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ include "apappp.fullname" . }}-pv
+  name: {{ include "app.fullname" . }}-pv
 spec:
   storageClassName: "{{ .Values.persistence.storageClass }}"
   capacity:
