@@ -7,6 +7,16 @@ image:
 #  args: ["launch", "/data/dataset1.h5ad", "--host", "0.0.0.0"]
   pullPolicy: IfNotPresent
 
+
+configs: {}
+
+extraEnv: []
+#  - name: WORKSPACE_NAME
+#    valueFrom:
+#      configMapKeyRef:
+#        name: "{{ include "app.fullname" . }}-configs"
+#        key: WORKSPACE_NAME
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""

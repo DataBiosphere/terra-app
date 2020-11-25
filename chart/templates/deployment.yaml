@@ -45,6 +45,8 @@ spec:
             {{- range .Values.image.args }}
             - {{ . | quote }}
             {{- end }}
+          env:
+          {{ include "app.podEnvVars" $ }}
           ports:
             - name: http
               containerPort: {{ .Values.image.port }}

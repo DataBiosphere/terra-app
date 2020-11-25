@@ -2,4 +2,4 @@ apiVersion: v2
 name: terra-app
 description: Chart for deploying Terra applications
 type: application
-version: 0.1.0
+version: 0.1.1

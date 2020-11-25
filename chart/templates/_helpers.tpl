@@ -60,3 +60,12 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Define pod env vars
+*/}}
+{{- define "app.podEnvVars" -}}
+{{- if .Values.extraEnv }}
+{{ tpl (toYaml .Values.extraEnv) . | indent 12 }}
+{{- end }}
+{{- end -}}
