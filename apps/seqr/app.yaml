@@ -1,0 +1,52 @@
+name: seqr
+author: seqr@broadinstitute.org
+description: |
+  seqr is a web-based tool for rare disease genomics.
+version: 0.1.0
+services:
+  postgres:
+    image: "gcr.io/seqr-project/postgres:gcloud-prod"
+    port: 5433
+    environment:
+      - PGPORT=5433
+      - POSTGRES_PASSWORD=docker-compose-postgres-password
+    healthcheck: {} # todo
+
+  redis:
+    image: "gcr.io/seqr-project/redis:gcloud-prod"
+    port: 80
+    healthcheck: () # todo
+
+  elasticsearch:
+    image: gcr.io/seqr-project/elasticsearch:gcloud-prod-elasticsearch
+    port: 9200
+    environment:
+      - http.host=0.0.0.0
+      - discovery.type=single-node
+      - cluster.routing.allocation.disk.threshold_enabled=false
+    healthcheck: {} # todo
+
+  kibana:
+    image: gcr.io/seqr-project/kibana:gcloud-prod
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    healthcheck: {} # todo
+
+  seqr:
+    image: "cumulusprod/cirrocumulus:latest"
+    port: 8000
+    environment:
+      - SEQR_GIT_BRANCH=dev
+      - PYTHONPATH=/seqr
+      - STATIC_MEDIA_DIR=/seqr_static_files
+      - POSTGRES_SERVICE_HOSTNAME=postgres
+      - POSTGRES_SERVICE_PORT=5433
+      - POSTGRES_PASSWORD=docker-compose-postgres-password
+      - ELASTICSEARCH_SERVICE_HOSTNAME=elasticsearch
+      - REDIS_SERVICE_HOSTNAME=redis
+      - KIBANA_SERVICE_HOSTNAME=kibana
+      - PGHOST=postgres
+      - PGPORT=5433
+      - PGUSER=postgres
+      - GUNICORN_WORKER_THREADS=4
+    healthcheck: {} # todo
