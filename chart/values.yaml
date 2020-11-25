@@ -83,7 +83,7 @@ persistence:
   enabled: true 
   storageClass: "manual"
   # size: 50G
-  accessMode: ReadWriteOnce
+  # accessMode: ReadOnlyMany 
   # gcePersistentDisk: "gce-pd-name"
-  mountPath: "/data"
+  # mountPath: "/data"
 

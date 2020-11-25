@@ -9,3 +9,5 @@ services:
     port: 5000
     command:  ["cirro"]
     args: ["launch", "--host", "0.0.0.0"]
+    pdMountPath: "/data"
+    pdAccessMode: "ReadOnlyMany" 
