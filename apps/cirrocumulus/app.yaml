@@ -8,4 +8,4 @@ services:
     image: "cumulusprod/cirrocumulus:latest"
     port: 5000
     command:  ["cirro"]
-    args: ["launch"] # client needs to add: ["/data/file", "--host", "0.0.0.0"]
+    args: ["launch", "--host", "0.0.0.0"]

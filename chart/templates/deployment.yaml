@@ -38,7 +38,7 @@ spec:
           image: "{{ .Values.image.image }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
-            {{- range .Values.ingress.command }}
+            {{- range .Values.image.command }}
             - {{ . | quote }}
             {{- end }}
           args: 
