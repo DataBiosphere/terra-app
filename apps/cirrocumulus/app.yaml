@@ -8,4 +8,4 @@ services:
     image: "cumulusprod/cirrocumulus:latest"
     port: 5000
     command:  ["cirro"]
-    args: ["launch", "--host", "0.0.0.0"]
+    args: ["--host", "0.0.0.0", "launch"]
