@@ -1,0 +1,13 @@
+name: cirrocumulus
+author: cirrocumulus@broadinstitute.org
+description: |
+  Cirrocumulus for Single-Cell Data Visualization
+version: 0.1.0
+services:
+  cirrocumulus:
+    image: "cumulusprod/cirrocumulus:latest"
+    port: 5000
+    command:  ["cirro"]
+    args: ["launch", "--host", "0.0.0.0"]
+    pdMountPath: "/data"
+    pdAccessMode: "ReadOnlyMany" 

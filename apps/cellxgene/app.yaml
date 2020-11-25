@@ -1,0 +1,13 @@
+name: cellxgene
+author: chanzuckerberg
+description: |
+  An interactive explorer for single-cell transcriptomics data
+version: 0.1.0
+services:
+  cellxgene:
+    image: "us.gcr.io/broad-dsp-gcr-public/cellxgene:latest"
+    port: 5005
+    command:  ["cellxgene"]
+    args: ["launch", "--host", "0.0.0.0"]
+    pdMountPath: "/data"
+    pdAccessMode: "ReadOnlyMany"
