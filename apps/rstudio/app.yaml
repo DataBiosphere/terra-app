@@ -7,10 +7,12 @@ services:
   rstudio:
     image: "us.gcr.io/anvil-gcr-public/anvil-rstudio-bioconductor:0.0.10"
     port: 8001
-    command:  []
-    args: []
+    # inject a sed command to remove the www-address config used by Leo
+    command:  ["/bin/sh", "-c"]
+    args: ["sed -i 's/^www-address.*$//' $RSTUDIO_HOME/rserver.conf && /init"]
     pdMountPath: "/data"
     pdAccessMode: "ReadWriteOnce"
     environment:
       WORKSPACE_NAME: "my-ws"
       WORKSPACE_NAMESPACE: "my-proj"
+      USER: "rstudio"

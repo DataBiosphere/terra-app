@@ -158,8 +158,9 @@ install_app() {
     _appname=$(yq e '.name' "${_filename}")
     _namespace="${_appname}-ns"
     local _ksa="${_appname}-ksa"
-    local _ingresspath="/${_appname}(/|$)(.*)"
-
+    #local _ingresspath="/${_appname}(/|$)(.*)"
+    local _ingresspath="/"
+    
     if [ -z "${_appname}" ] | [ "${_appname}" == "null" ] ; then
         echo "Error: could not parse app name from file '${_filename}'."
         exit 1
@@ -180,7 +181,8 @@ install_app() {
     echo "${_env}"
 
     # build values yaml from app descriptor 
-    # note this supports at most 3 EVs; I couldn't figure out how to make yq map over keys
+    # TODO note this supports at most 3 EVs; there is probably a nicer way but 
+    # I couldn't figure out how to make yq map over keys.
     local _tmp_values=$(mktemp)
     yq e \
       ".nameOverride=.name \
@@ -188,18 +190,17 @@ install_app() {
       | .image.port=.services.*.port \
       | .image.command=.services.*.command \
       | .image.args=.services.*.args \
-      | .ingress.hosts[0].paths[0]=\"${_ingresspath}\" \
       | .persistence.hostPath=\"/data\" \
       | .configs=.services.*.environment \
-      | .extraEnv[0].name=(.configs | keys | .[0]) \
-      | .extraEnv[0].valueFrom.configMapKeyRef.name=\"${_appname}-${_appname}-configs\" \
-      | .extraEnv[0].valueFrom.configMapKeyRef.key=(.configs | keys | .[0])' \
-      | .extraEnv[1].name=(.configs | keys | .[1]) \
-      | .extraEnv[1].valueFrom.configMapKeyRef.name=\"${_appname}-${_appname}-configs\" \
-      | .extraEnv[1].valueFrom.configMapKeyRef.key=(.configs | keys | .[1])' \
-      | .extraEnv[2].name=(.configs | keys | .[2]) \
-      | .extraEnv[2].valueFrom.configMapKeyRef.name=\"${_appname}-${_appname}-configs\" \
-      | .extraEnv[2].valueFrom.configMapKeyRef.key=(.configs | keys | .[2])' \
+      | .extraEnv[0].name=(.configs | keys | .[0]) // \"unset0\" \
+      | .extraEnv[0].valueFrom.configMapKeyRef.name=\"${_appname}-configs\" \
+      | .extraEnv[0].valueFrom.configMapKeyRef.key=(.configs | keys | .[0]) // \"unset0\" \
+      | .extraEnv[1].name=(.configs | keys | .[1]) // \"unset1\" \
+      | .extraEnv[1].valueFrom.configMapKeyRef.name=\"${_appname}-configs\" \
+      | .extraEnv[1].valueFrom.configMapKeyRef.key=(.configs | keys | .[1]) // \"unset1\" \
+      | .extraEnv[2].name=(.configs | keys | .[2]) // \"unset2\" \
+      | .extraEnv[2].valueFrom.configMapKeyRef.name=\"${_appname}-configs\" \
+      | .extraEnv[2].valueFrom.configMapKeyRef.key=(.configs | keys | .[2]) // \"unset2\" \
       | del(.name) \
       | del(.services)" "${_filename}" > "${_tmp_values}"
 
@@ -208,9 +209,9 @@ install_app() {
         yq e -i ".image.args += \"$a\"" "${_tmp_values}"
     done    
 
-    #echo "Installing chart with values:"
-    #cat "${_tmp_values}"
-    #echo ""
+    echo "Installing chart with values:"
+    cat "${_tmp_values}"
+    echo ""
     
     # install the app
     helm upgrade --install -n "${_namespace}" \
