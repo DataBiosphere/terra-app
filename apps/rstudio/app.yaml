@@ -1,0 +1,16 @@
+name: rstudio 
+author: workbench-interactive-analysis@broadinstitute.org
+description: |
+  RStudio
+version: 0.0.10
+services:
+  rstudio:
+    image: "us.gcr.io/anvil-gcr-public/anvil-rstudio-bioconductor:0.0.10"
+    port: 8001
+    command:  []
+    args: []
+    pdMountPath: "/data"
+    pdAccessMode: "ReadWriteOnce"
+    environment:
+      WORKSPACE_NAME: "my-ws"
+      WORKSPACE_NAMESPACE: "my-proj"

@@ -109,7 +109,13 @@ install() {
     echo ""
     echo "Congratulations! Your app has been installed on minikube."
     echo ""
-    echo "To open it, do the following:"
+    echo "To poll application startup, do one or more of the following:"
+    echo ""
+    echo " kubectl get pod -n ${_namespace}"
+    echo " kubectl describe pod -n ${_namespace} [pod-name]"
+    echo " kubectl logs -n ${_namespace} [pod-name]"
+    echo ""
+    echo "Once the pod is RUNNING, do the following to open the app:"
     echo ""
     echo "1. Add an entry to your /etc/hosts:"
     echo "     ${_minikube_ip}  k8s.app.info"
@@ -150,7 +156,7 @@ install_app() {
    
     # parse information out of the descriptor
     _appname=$(yq e '.name' "${_filename}")
-    local _namespace="${_appname}-ns"
+    _namespace="${_appname}-ns"
     local _ksa="${_appname}-ksa"
     local _ingresspath="/${_appname}(/|$)(.*)"
 
@@ -161,12 +167,6 @@ install_app() {
 
     echo "Installing '${_appname}' from descriptor file '${_filename}'..."
  
-    # parse image, port, command, and args 
-    local _image=$(yq e '.services.*.image' "${_filename}" | head -1)
-    local _port=$(yq e '.services.*.port' "${_filename}" | head -1)
-    local _command=$(yq  e '.services.*.command' "${_filename}" | head -1)
-    local _args=$(yq  e '.services.*.args' "${_filename}" | head -1)
-
     # create the namespace if it doesn't already exist
     if ! kubectl get ns | grep -q "${_namespace}"; then
         kubectl create namespace "${_namespace}"
@@ -177,16 +177,31 @@ install_app() {
         kubectl create serviceaccount --namespace "${_namespace}" "${_appname_ksa}"
     fi
 
-    # install app
+    echo "${_env}"
+
+    # build values yaml from app descriptor 
+    # note this supports at most 3 EVs; I couldn't figure out how to make yq map over keys
     local _tmp_values=$(mktemp)
-    yq e -n \
-      ".nameOverride=\"${_appname}\" \
-      | .image.image=\"${_image}\" \
-      | .image.port=\"${_port}\" \
-      | .image.command=${_command} \
-      | .image.args=${_args} \
+    yq e \
+      ".nameOverride=.name \
+      | .image.image=.services.*.image \
+      | .image.port=.services.*.port \
+      | .image.command=.services.*.command \
+      | .image.args=.services.*.args \
       | .ingress.hosts[0].paths[0]=\"${_ingresspath}\" \
-      | .persistence.hostPath=\"/data\"" > "${_tmp_values}"
+      | .persistence.hostPath=\"/data\" \
+      | .configs=.services.*.environment \
+      | .extraEnv[0].name=(.configs | keys | .[0]) \
+      | .extraEnv[0].valueFrom.configMapKeyRef.name=\"${_appname}-${_appname}-configs\" \
+      | .extraEnv[0].valueFrom.configMapKeyRef.key=(.configs | keys | .[0])' \
+      | .extraEnv[1].name=(.configs | keys | .[1]) \
+      | .extraEnv[1].valueFrom.configMapKeyRef.name=\"${_appname}-${_appname}-configs\" \
+      | .extraEnv[1].valueFrom.configMapKeyRef.key=(.configs | keys | .[1])' \
+      | .extraEnv[2].name=(.configs | keys | .[2]) \
+      | .extraEnv[2].valueFrom.configMapKeyRef.name=\"${_appname}-${_appname}-configs\" \
+      | .extraEnv[2].valueFrom.configMapKeyRef.key=(.configs | keys | .[2])' \
+      | del(.name) \
+      | del(.services)" "${_filename}" > "${_tmp_values}"
 
     # apply extra args, if any
     for a in "${_extraargs[@]}"; do
@@ -197,6 +212,7 @@ install_app() {
     #cat "${_tmp_values}"
     #echo ""
     
+    # install the app
     helm upgrade --install -n "${_namespace}" \
       "${_appname}" \
       chart/ \
