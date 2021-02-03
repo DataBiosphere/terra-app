@@ -8,6 +8,7 @@ This repo contains tooling for launching custom approved apps in [Terra]([https:
 
 - [Architecture](#architecture)
 - [App Schema](#app-schema)
+- [Supported Apps](#supported-apps)
 - [Launching an App Locally](#launching-an-app-locally)
 - [Launching an App on Terra](#launching-an-app-on-terra)
 - [Helm Chart](#helm-chart)
@@ -74,8 +75,20 @@ services:
       WORKSPACE_NAME: "my-ws"
       WORKSPACE_NAMESPACE: "my-proj"
 ```
-      
-Example apps can be found in this repo under [apps](/apps).
+
+# Supported Apps
+
+Example apps can be found in this repo under [apps](/apps). View the following for more details:
+
+[cellxgene](apps/cellxgene)
+
+[cirrocumulus](apps/cirrocumulus)
+
+[jupyter](apps/jupyter)
+
+[rstduio](apps/rstduio)
+
+[ucsc_genome_browser](apps/ucsc_genome_browser)
 
 # Launching an App Locally
 
