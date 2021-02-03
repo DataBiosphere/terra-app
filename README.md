@@ -30,7 +30,7 @@ Here is a description of the app YAML schema:
 
 ```
 # Short name of the app, for example 'jupyter'. This is used to name some Kubernetes resources,
-# e.g. the namespace is generated as 'jupyter-ns'.
+# for example the namespace is generated as 'jupyter-ns'.
 name: jupyter
 
 # Maintainer of the app. Informational only.
