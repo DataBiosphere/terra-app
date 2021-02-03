@@ -15,4 +15,5 @@ services:
     environment:
       WORKSPACE_NAME: "my-ws"
       WORKSPACE_NAMESPACE: "my-proj"
+      # needed to disable auth
       USER: "rstudio"
