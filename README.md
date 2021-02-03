@@ -2,6 +2,8 @@
 
 This repo contains tooling for launching custom approved apps in [Terra]([https://app.terra.bio/).
 
+**Note this project is under active development, and may not be fully functional yet.**
+
 ## Table of Contents
 
 - [Architecture](#architecture)
