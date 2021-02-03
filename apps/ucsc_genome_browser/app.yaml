@@ -1,0 +1,12 @@
+name: ucsc-gb
+author: UCSC 
+description: |
+  UCSC Genome Browser
+version: 0.0.1
+services:
+  ucsc-gb:
+    image: "dailydreaming/genome_browser:0.17"
+    port: 8000
+    pdMountPath: "/data"
+    pdAccessMode: "ReadWriteOnce"
+    environment: {}
