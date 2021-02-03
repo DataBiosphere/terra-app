@@ -14,7 +14,7 @@ This repo contains tooling for launching custom approved apps in [Terra]([https:
 
 # Architecture
 
-Apps are defined by a YAML [schema](#app-schema). An "app launcher" (such as Terra) parses the app YAML file, and invokes a helm chart to launch the app on a Kubernetes cluster. Once the app is launched, it may be accessed in a browser via a proxy URL.
+Apps are defined by a YAML [schema](#app-schema). An "app launcher" (such as Terra) receives a request to launch an app, parses the app YAML file, and invokes a helm chart with the appropriate values to launch the app on a Kubernetes cluster. Once the app is launched, it may be accessed by the end user in a browser via a proxy URL.
 
 Here is a diagram of the app launch flow:
 
