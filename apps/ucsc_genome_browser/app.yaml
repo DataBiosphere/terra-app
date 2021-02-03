@@ -5,6 +5,7 @@ description: |
 version: 0.0.1
 services:
   ucsc-gb:
+    # TODO: refresh image
     image: "dailydreaming/genome_browser:0.17"
     port: 8000
     pdMountPath: "/data"
