@@ -7,9 +7,10 @@ services:
   rstudio:
     image: "us.gcr.io/broad-dsp-gcr-public/terra-jupyter-gatk:1.0.14"
     port: 8000
+    baseUrl: "/jupyter/"
     # inject a sed command to strip out path customizations used by Leo; this causes the app to listen on /
     command:  ["/bin/sh", "-c"]
-    args: ["sed -i 's/^c.NotebookApp.base_url.*$//; s/^.*static_url_prefix.*$//' $JUPYTER_HOME/jupyter_notebook_config.py && /usr/local/bin/jupyter notebook"]
+    args: ["sed -i 's/\\/notebooks/\\/jupyter/' $JUPYTER_HOME/jupyter_notebook_config.py ; /usr/local/bin/jupyter notebook"]
     pdMountPath: "/data"
     pdAccessMode: "ReadWriteOnce"
     environment:

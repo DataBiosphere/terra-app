@@ -4,33 +4,30 @@ replicaCount: 1
 image:
   # image: "cumulusprod/cirrocumulus:latest"
   # port: 5000
+  baseUrl: /
   # command: ["cirro"]
   # args: ["launch", "/data/dataset1.h5ad", "--host", "0.0.0.0"]
   pullPolicy: IfNotPresent
 
-# Provided by Leo.
-# TODO these exist to facilitate the terra-app-local.sh script.
-# Would be nice to find a better way.
-configs:
-  unset0: "unset0"
-  unset1: "unset1"
-  unset2: "unset2"
-
+# Provided by Leonardo
+configs: {}
+  # WORKSPACE_NAME: my-ws
 
 # Provided by Leonardo
 extraEnv: []
-#  - name: WORKSPACE_NAME
-#    valueFrom:
-#      configMapKeyRef:
-#        name: "{{ include "app.fullname" . }}-configs"
-#        key: WORKSPACE_NAME
+  # - name: WORKSPACE_NAME
+  #   valueFrom:
+  #    configMapKeyRef:
+  #      name: "{{ include "app.fullname" . }}-configs"
+  #      key: WORKSPACE_NAME
 
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-# TODO: Currently Leonardo sets up the KSA with Workload Identity manually.
-# We may want to move that setup to this chart.
+# Provided by Leonardo
+# TODO: Currently Leonardo sets up the KSA with Workload Identity via manual
+# k8s and GCP calls. We may want to move that setup to this chart.
 serviceAccount:
   create: false
   annotations: {}
@@ -53,7 +50,7 @@ service:
   type: ClusterIP
   port: 80
 
-# Commented fields provided by Leonardo
+# TLS and rewrite rules provided by Leonardo
 ingress:
   enabled: true
   annotations:
@@ -63,14 +60,13 @@ ingress:
     # nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
     # nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
     # nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    # nginx.ingress.kubernetes.io/proxy-redirect-from: "http://k8s.app.info"
-    # nginx.ingress.kubernetes.io/proxy-redirect-to: "http://k8s.app.info"
+    # nginx.ingress.kubernetes.io/proxy-redirect-from: "https://k8s-host/"
+    # nginx.ingress.kubernetes.io/proxy-redirect-to: "https://leo-host/"
     # nginx.ingress.kubernetes.io/rewrite-target: "/$2"
   hosts:
     - host: "k8s.app.info"
       paths:
-        - "/" 
-        # - "/app(/|$)(.*)"
+         - "/app(/|$)(.*)"
   # tls:
     # - secretName: "tls-secret"
 

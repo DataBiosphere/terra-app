@@ -60,11 +60,11 @@ spec:
               name: {{ include "app.fullname" . }}-storage
           livenessProbe:
             httpGet:
-              path: /
+              path: "{{ .Values.image.baseUrl }}"
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: "{{ .Values.image.baseUrl }}"
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

@@ -118,10 +118,10 @@ install() {
     echo "Once the pod is RUNNING, do the following to open the app:"
     echo ""
     echo "1. Add an entry to your /etc/hosts:"
-    echo "     ${_minikube_ip}  k8s.app.info"
+    echo "     ${_minikube_ip}  ${_hostname}"
     echo ""
     echo "2. Load this URL in a browser:"
-    echo "     http://k8s.app.info/${_appname}/"
+    echo "     http://${_hostname}/${_appname}/"
     echo ""
 }
 
@@ -158,8 +158,13 @@ install_app() {
     _appname=$(yq e '.name' "${_filename}")
     _namespace="${_appname}-ns"
     local _ksa="${_appname}-ksa"
-    #local _ingresspath="/${_appname}(/|$)(.*)"
-    local _ingresspath="/"
+    local _baseurl=$(yq e '.services.*.baseUrl' "${_filename}")
+    if [ -z "${_baseurl}" ] | [ "${_baseurl}" == "null" ]; then
+        local _ingresspath="/${_appname}(/|$)(.*)"       
+    else
+        local _ingresspath="${_baseurl}" 
+    fi
+    _hostname="k8s.app.info"
     
     if [ -z "${_appname}" ] | [ "${_appname}" == "null" ] ; then
         echo "Error: could not parse app name from file '${_filename}'."
@@ -178,8 +183,6 @@ install_app() {
         kubectl create serviceaccount --namespace "${_namespace}" "${_appname_ksa}"
     fi
 
-    echo "${_env}"
-
     # build values yaml from app descriptor 
     # TODO note this supports at most 3 EVs; there is probably a nicer way but 
     # I couldn't figure out how to make yq map over keys.
@@ -188,10 +191,16 @@ install_app() {
       ".nameOverride=.name \
       | .image.image=.services.*.image \
       | .image.port=.services.*.port \
+      | .image.baseUrl=.services.*.baseUrl \
       | .image.command=.services.*.command \
       | .image.args=.services.*.args \
+      | .ingress.hosts[0].host=\"${_hostname}\" \
+      | .ingress.hosts[0].paths[0]=\"${_ingresspath}\" \
       | .persistence.hostPath=\"/data\" \
       | .configs=.services.*.environment \
+      | .configs.unset0=\"unset0\" \
+      | .configs.unset1=\"unset1\" \
+      | .configs.unset2=\"unset2\" \
       | .extraEnv[0].name=(.configs | keys | .[0]) // \"unset0\" \
       | .extraEnv[0].valueFrom.configMapKeyRef.name=\"${_appname}-configs\" \
       | .extraEnv[0].valueFrom.configMapKeyRef.key=(.configs | keys | .[0]) // \"unset0\" \
@@ -207,7 +216,15 @@ install_app() {
     # apply extra args, if any
     for a in "${_extraargs[@]}"; do
         yq e -i ".image.args += \"$a\"" "${_tmp_values}"
-    done    
+    done
+   
+    # apply proxy redirect rules if baseUrl is not specified by the app
+    if [ -z "${_baseurl}" ] | [ "${_baseurl}" == "null" ]; then
+        yq e -i \
+          ".ingress.annotations.\"nginx.ingress.kubernetes.io/rewrite-target\"=\"/\$2\" \
+          | .ingress.annotations.\"nginx.ingress.kubernetes.io/proxy-redirect-from\"=\"http://${_hostname}/\" \
+          | .ingress.annotations.\"nginx.ingress.kubernetes.io/proxy-redirect-to\"=\"http://${_hostname}/${_appname}/\"" "${_tmp_values}"
+    fi
 
     echo "Installing chart with values:"
     cat "${_tmp_values}"
