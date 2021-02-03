@@ -133,7 +133,7 @@ $ ./terra-app-local.sh install -f /apps/jupyter/app.yaml
 
 # Launching an App on Terra
  
-TODO! lol
+TODO :)
 
 # Helm Chart
 
