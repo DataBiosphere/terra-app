@@ -38,13 +38,13 @@ author: workbench-interactive-analysis@broadinstitute.org
 
 # Longer description of the app. Informational only.
 description: |
-  Jupyter
+  Jupyter Notebook, Python and R kernels, GATK packages
   
 # Version of the app. Informational only.
 version: 1.0.14
 
 # List of services the app exposes.
-# NOTE: currently only one service is allowed. In the future we may explore multi-service apps.
+# NOTE: currently only one service is supported by the helm chart. In the future we may explore multi-service apps.
 services:
   jupyter:
     # The app docker image. Required.
