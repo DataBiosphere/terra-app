@@ -15,7 +15,7 @@ This repo contains tooling for launching custom approved apps in [Terra]([https:
 
 # Architecture
 
-Apps are defined by a YAML [schema](#app-schema). An "app launcher" (such as Terra) receives a request to launch an app, parses the app YAML file, and invokes the [helm chart](#helm-chart) with the appropriate values to launch the app on a Kubernetes cluster. Once the app is launched, it may be accessed by the end user in a browser via a proxy URL.
+Apps are defined by a YAML [schema](#app-schema). An "app launcher" (such as Terra) receives a request to launch an app, parses the app YAML file, and invokes the [helm chart](#helm-chart) with the appropriate values to launch the app on a Kubernetes cluster. Once the app is launched, it may be accessed by the end user in a browser via a proxy URL defined by the app launcher.
 
 Diagram of the app launch flow:
 
@@ -137,7 +137,7 @@ TODO :)
 
 # Helm Chart
 
-The helm chart to deploy apps lives in this repo under [charts](charts). (Work in progress)
+The helm chart to deploy apps lives in this repo under [chart](chart). (Work in progress)
 
 The chart lives in a repo here:
 ```
