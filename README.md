@@ -79,7 +79,7 @@ Example apps can be found in this repo under [apps](/apps).
 
 # Launching an App Locally
 
-This repo contains a script called `terra-app-local.sh` to facilitate launching apps on a locally running [minikube](https://minikube.sigs.k8s.io/docs/) cluster.
+This repo contains a `terra-app-local.sh` script which can launch apps on a locally running [minikube](https://minikube.sigs.k8s.io/docs/) cluster. This can be much more convenient for development than launching apps against Terra.
 
 Before running the script:
 1. Install `minikube` according to instructions [here](https://minikube.sigs.k8s.io/docs/start/).
