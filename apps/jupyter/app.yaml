@@ -1,0 +1,18 @@
+name: jupyter 
+author: workbench-interactive-analysis@broadinstitute.org
+description: |
+  Jupyter
+version: 1.0.14
+services:
+  jupyter:
+    image: "us.gcr.io/broad-dsp-gcr-public/terra-jupyter-gatk:1.0.14"
+    port: 8000
+    baseUrl: "/jupyter/"
+    # inject a sed command to make the app listen on /jupyter instead of /notebooks
+    command:  ["/bin/sh", "-c"]
+    args: ["sed -i 's/\\/notebooks/\\/jupyter/' $JUPYTER_HOME/jupyter_notebook_config.py ; /usr/local/bin/jupyter notebook"]
+    pdMountPath: "/data"
+    pdAccessMode: "ReadWriteOnce"
+    environment:
+      WORKSPACE_NAME: "my-ws"
+      WORKSPACE_NAMESPACE: "my-proj"

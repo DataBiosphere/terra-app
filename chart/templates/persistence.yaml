@@ -9,12 +9,18 @@ spec:
     storage: {{ .Values.persistence.size }}
   accessModes:
     - {{ .Values.persistence.accessMode }}
+  {{- if .Values.persistence.hostPath }}
+  hostPath:
+    path: {{ .Values.persistence.hostPath }}
+  {{- end }}
   claimRef:
     namespace: {{ $.Release.Namespace }}
     name: {{ include "app.fullname" . }}-pvc
+  {{- if .Values.persistence.gcePersistentDisk }}
   gcePersistentDisk:
     pdName: {{ .Values.persistence.gcePersistentDisk }}
     fsType: ext4
+  {{- end }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -22,6 +28,7 @@ metadata:
   name: {{ include "app.fullname" . }}-pvc
 spec:
   storageClassName: "{{ .Values.persistence.storageClass }}"
+  volumeName: {{ include "app.fullname" . }}-pv
   accessModes:
     - {{ .Values.persistence.accessMode }}
   resources:

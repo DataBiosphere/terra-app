@@ -37,14 +37,18 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.image }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.image.command }}
           command:
             {{- range .Values.image.command }}
             - {{ . | quote }}
             {{- end }}
+          {{- end }}
+          {{- if .Values.image.args }}
           args: 
             {{- range .Values.image.args }}
             - {{ . | quote }}
             {{- end }}
+          {{- end }}
           env:
           {{ include "app.podEnvVars" $ }}
           ports:
@@ -56,11 +60,11 @@ spec:
               name: {{ include "app.fullname" . }}-storage
           livenessProbe:
             httpGet:
-              path: /
+              path: "{{ .Values.image.baseUrl }}"
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: "{{ .Values.image.baseUrl }}"
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
