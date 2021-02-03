@@ -138,3 +138,17 @@ TODO! lol
 # Helm Chart
 
 The helm chart to deploy apps lives in this repo under [charts](charts). (Work in progress)
+
+The chart lives in a repo here:
+```
+helm repo add terra https://terra-app-charts.storage.googleapis.com
+helm repo update
+```
+```
+$ helm show chart terra/terra-app
+apiVersion: v2
+description: Chart for deploying Terra applications
+name: terra-app
+type: application
+version: 0.2.0
+```
