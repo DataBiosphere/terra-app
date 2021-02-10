@@ -1,6 +1,6 @@
 # Install terra-set-up chart
 ```
-helm install  --set serviceAccount.annotations.gcpServiceAccount="qi-leo-restart-apache@broad-dsde-dev.iam.gserviceaccount.com" -n qi-test qi-set-up-test ./terra-setup-chart
+helm install  --set serviceAccount.annotations.gcpServiceAccount="qi-leo-restart-apache@broad-dsde-dev.iam.gserviceaccount.com" -n qi-test qi-set-up-test ./terra-app-setup-chart
 ```
 
 
