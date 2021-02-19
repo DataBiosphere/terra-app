@@ -1,0 +1,5 @@
+apiVersion: v2
+name: terra-app-setup
+description: Chart for set up entities for deploying Terra applications
+type: application
+version: 0.0.1
