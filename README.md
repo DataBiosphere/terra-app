@@ -12,6 +12,7 @@ This repo contains tooling for launching custom approved apps in [Terra]([https:
 - [Launching an App Locally](#launching-an-app-locally)
 - [Launching an App on Terra](#launching-an-app-on-terra)
 - [Helm Chart](#helm-chart)
+- [Publishing `terra-app-charts` Helm Chart](#publishing-terra-app-charts-helm-chart)
 
 # Architecture
 
@@ -151,4 +152,13 @@ description: Chart for deploying Terra applications
 name: terra-app
 type: application
 version: 0.2.0
+```
+
+# Publishing `terra-app-charts` Helm Chart
+```
+helm package chart
+mkdir chart/repo
+mv terra-app-0.2.0.tgz chart/repo/
+helm repo index chart/repo/ --url https://storage.googleapis.com/terra-app-charts
+gsutil cp -r chart/repo/* gs://terra-app-charts
 ```
