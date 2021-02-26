@@ -26,11 +26,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 # Provided by Leonardo
-# TODO: Currently Leonardo sets up the KSA with Workload Identity via manual
-# k8s and GCP calls. We may want to move that setup to this chart.
 serviceAccount:
-  create: false
-  annotations: {}
   name: ""
 
 podAnnotations: {}
@@ -68,7 +64,9 @@ ingress:
       paths:
          - "/app(/|$)(.*)"
   # tls:
-    # - secretName: "tls-secret"
+  # - secretName: "tls-secret"
+  #   hosts:
+  #     - "k8s.app.info"
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

@@ -138,27 +138,29 @@ TODO :)
 
 # Helm Chart
 
-The helm chart to deploy apps lives in this repo under [chart](chart). (Work in progress)
+There are two helm charts inside this repo:
 
-The chart lives in a repo here:
+1. [terra-app-setup-chart](terra-app-setup-chart): this chart sets up common infrastructure used by Galaxy and Terra custom apps.
+2. [terra-app-chart](terra-app-chart): this chart deploys Terra custom apps.
+
+The charts are deployed to the following repos:
 ```
-helm repo add terra https://terra-app-charts.storage.googleapis.com
+helm repo add terra-app https://terra-app-charts.storage.googleapis.com
+helm repo add terra-app-setup https://terra-app-setup-chart.storage.googleapis.com
 helm repo update
 ```
 ```
-$ helm show chart terra/terra-app
+$ helm show chart terra-app/terra-app
 apiVersion: v2
 description: Chart for deploying Terra applications
 name: terra-app
 type: application
-version: 0.2.0
-```
+version: 0.3.0
 
-# Publishing `terra-app-charts` Helm Chart
-```
-helm package chart
-mkdir chart/repo
-mv terra-app-0.2.0.tgz chart/repo/
-helm repo index chart/repo/ --url https://storage.googleapis.com/terra-app-charts
-gsutil cp -r chart/repo/* gs://terra-app-charts
+$ helm show chart terra-app-setup/terra-app-setup
+apiVersion: v2
+description: Chart for set up entities for deploying Terra applications
+name: terra-app-setup
+type: application
+version: 0.0.1
 ```
