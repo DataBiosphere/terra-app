@@ -134,17 +134,15 @@ install_nginx() {
     fi
     
     # check if we need to add the nginx helm repo
-    if ! helm show chart center/stable/nginx-ingress --version 1.41.3 >/dev/null 2>&1; then
-        helm repo add center https://repo.chartcenter.io --force-update > /dev/null
+    if ! helm show chart ingress-nginx/ingress-nginx --version=3.23.0 >/dev/null 2>&1; then
+        helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx --force-update > /dev/null
         helm repo update >/dev/null
     fi
 
     # install nginx
-    helm upgrade --install nginx center/stable/nginx-ingress \
+    helm upgrade --install nginx ingress-nginx/ingress-nginx \
       -n nginx \
-      --version 1.41.3 \
-      --set rbac.create=true \
-      --set controller.publishService.enabled=true \
+      --version 3.23.0 \
       --set controller.service.externalIPs[0]="${_minikube_ip}" >/dev/null 2>&1
 }
 
@@ -233,7 +231,7 @@ install_app() {
     # install the app
     helm upgrade --install -n "${_namespace}" \
       "${_appname}" \
-      chart/ \
+      terra-app-chart/ \
       -f "${_tmp_values}"
 }
 

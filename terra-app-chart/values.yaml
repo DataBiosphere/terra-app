@@ -26,11 +26,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 # Provided by Leonardo
-# TODO: Currently Leonardo sets up the KSA with Workload Identity via manual
-# k8s and GCP calls. We may want to move that setup to this chart.
 serviceAccount:
-  create: false
-  annotations: {}
   name: ""
 
 podAnnotations: {}
