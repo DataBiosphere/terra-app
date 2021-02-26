@@ -1,0 +1,17 @@
+name: dicom-viewer
+author: RENCI
+description: |
+  DICOM Viewer
+version: 0.0.1
+services:
+  ucsc-gb:
+    # TODO: refresh image
+    image: "us.gcr.io/broad-dsp-gcr-public/dicom-view:rt-test"
+    port: 8001
+    baseUrl: "/"
+    pdMountPath: "/data"
+    pdAccessMode: "ReadWriteOnce"
+    environment:
+      USER_NAME: terra
+      VNC_PW: terra123
+      CLIENT_ID: replace-me

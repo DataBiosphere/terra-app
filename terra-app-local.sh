@@ -226,9 +226,9 @@ install_app() {
           | .ingress.annotations.\"nginx.ingress.kubernetes.io/proxy-redirect-to\"=\"http://${_hostname}/${_appname}/\"" "${_tmp_values}"
     fi
 
-    echo "Installing chart with values:"
-    cat "${_tmp_values}"
-    echo ""
+    #echo "Installing chart with values:"
+    #cat "${_tmp_values}"
+    #echo ""
     
     # install the app
     helm upgrade --install -n "${_namespace}" \
