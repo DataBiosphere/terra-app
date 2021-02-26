@@ -155,7 +155,7 @@ apiVersion: v2
 description: Chart for deploying Terra applications
 name: terra-app
 type: application
-version: 0.2.0
+version: 0.3.0
 
 $ helm show chart terra-app-setup/terra-app-setup
 apiVersion: v2
