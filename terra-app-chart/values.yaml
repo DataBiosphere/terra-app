@@ -64,7 +64,9 @@ ingress:
       paths:
          - "/app(/|$)(.*)"
   # tls:
-    # - secretName: "tls-secret"
+  # - secretName: "tls-secret"
+  #   hosts:
+  #     - "k8s.app.info"
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
