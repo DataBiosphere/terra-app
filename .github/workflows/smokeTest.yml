@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-       app: [test1, test2]
+       app: [ucsc_genome_browser]
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -31,7 +31,7 @@ jobs:
           mkdir /test-dir
           touch /test-dir/temp.txt
           sudo apt-get install helm
-          
+
       # we currently use this pre-made action for minikube https://github.com/marketplace/actions/setup-minikube-kubernetes-cluster
       # it supports our use case at the time if writing, but there may come a time when we want to set it up ourselves
       - name: Setup Minikube
@@ -44,10 +44,13 @@ jobs:
         
       - name: Interact with the cluster
         env:
-          APP_DESCRIPTOR: ${{ matrix.app }}
+          APP_DIR_NAME: ${{ matrix.app }}
         run: |
-          echo "app descriptor is: $APP_DESCRIPTOR"
+          echo "app descriptor is: $APP_DIR_NAME"
           kubectl get nodes 
+          ./terra-app-local.sh install -f ./apps/$APP_DIR_NAME/app.yaml
           
       - name: Run local app 
+        run:
+            echo test
 
