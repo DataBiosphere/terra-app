@@ -20,24 +20,34 @@ jobs:
     strategy:
       matrix:
        app: [test1, test2]
-    env:
-      APP_DESCRIPTOR: ${{ matrix.app }}
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v2
-      
+
+      - name: Setup data for tests and perform system installs
+        run: |
+          mkdir /test-dir
+          touch /test-dir/temp.txt
+          sudo apt-get install helm
+          
+      # we currently use this pre-made action for minikube https://github.com/marketplace/actions/setup-minikube-kubernetes-cluster
+      # it supports our use case at the time if writing, but there may come a time when we want to set it up ourselves
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.3.1
         with:
           minikube version: 'v1.16.0'
           kubernetes version: 'v1.19.2'
           github token: ${{ secrets.GITHUB_TOKEN }}
+          start args: 'start --vm=true --mount --mount-string="/test-dir:/data"'
         
       - name: Interact with the cluster
+        env:
+          APP_DESCRIPTOR: ${{ matrix.app }}
         run: |
           echo "app descriptor is: $APP_DESCRIPTOR"
           kubectl get nodes 
           
+      - name: Run local app 
+
