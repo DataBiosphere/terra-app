@@ -33,8 +33,7 @@ jobs:
           mkdir test-dir
           touch ./test-dir/temp.txt
           sudo snap install helm --classic
-          sudo apt-get update
-          sudo apt-get install yq
+          sudo snap install yq
 
       # we currently use this pre-made action for minikube https://github.com/marketplace/actions/setup-minikube-kubernetes-cluster
       # it supports our use case at the time if writing, but there may come a time when we want to set it up ourselves
