@@ -20,6 +20,8 @@ jobs:
     strategy:
       matrix:
        app: [ucsc_genome_browser]
+    env:
+      APP_DIR_NAME: ${{ matrix.app }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -31,6 +33,7 @@ jobs:
           mkdir test-dir
           touch ./test-dir/temp.txt
           sudo snap install helm --classic
+          sudo apt-get update
           sudo apt-get install yq
 
       # we currently use this pre-made action for minikube https://github.com/marketplace/actions/setup-minikube-kubernetes-cluster
@@ -44,8 +47,6 @@ jobs:
           start args: 'start --vm=true --mount --mount-string="./test-dir:/data"'
         
       - name: Interact with the cluster
-        env:
-          APP_DIR_NAME: ${{ matrix.app }}
         run: |
           echo "app descriptor is: $APP_DIR_NAME"
           kubectl get nodes 
