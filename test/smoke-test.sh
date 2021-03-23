@@ -16,7 +16,7 @@ function run_test() {
   APP_NAME=$1
 
   # Extract command from config file as an array
-  local START_CMD=($(jq -r .$APP_NAME.startcmd < ./test/app-args.json))
+  local START_CMD=($(jq -r '."$APP_NAME".startcmd' < ./test/app-args.json))
   log "starting app $APP_NAME with cmd "$START_CMD". Will retry 5 times."
   # Execute the command 
   retry 5 ${START_CMD[@]}
