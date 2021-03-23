@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-       app: [ucsc_genome_browser]
+       app: [jupyter] #,ucsc_genome_browser
     env:
       APP_NAME: ${{ matrix.app }}
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -48,7 +48,7 @@ jobs:
           start args: 'start --vm=true' #--mount --mount-string="./test-dir:/data"
           
       - name: Run smoke test on app 
-        run: ./test/smoke-test.sh $APP_NAME
+        run: ./test/smoke-test.sh $APP  _NAME
 
       - name: Install minikube test
         run: |
