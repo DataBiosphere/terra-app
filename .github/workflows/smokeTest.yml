@@ -18,9 +18,11 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     strategy:
-      matrix:
+      # means we do not want a failure in a single app's smoketest to cause others to fail. Can be changed
+      fail-fast: false
       # add new apps to be smoke tested to the array below
-       app: [jupyter, ucsc_genome_browser]
+      matrix:
+       app: [jupyter, ucsc-genome-browser]
     env:
       APP_NAME: ${{ matrix.app }}
     # Steps represent a sequence of tasks that will be executed as part of the job

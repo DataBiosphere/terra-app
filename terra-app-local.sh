@@ -163,7 +163,6 @@ install_app() {
     else
         local _ingresspath="${_baseurl}" 
     fi
-    #TODO
     _hostname=$(jq -r .hostname < test/app-args.json)
     
     if [ -z "${_appname}" ] | [ "${_appname}" == "null" ] ; then

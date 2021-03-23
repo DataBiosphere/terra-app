@@ -27,7 +27,6 @@ function run_test() {
   #TODO: more verification on app now that it is running
   log "Curling the app"
   curl -I $(jq -r .hostname < test/app-args.json)/$APP_NAME
-  #TODO: verify status code from above when apps are stable
 
   verify_app
   log "Smoke tests passed for app $APP_NAME"
