@@ -25,6 +25,10 @@ function run_test() {
   retry 10 is_pod_running
 
   #TODO: more verification on app now that it is running
+  log "Curling the app"
+  curl -I $(minikube ip)/$APP_NAME
+  #TODO: verify status code when apps are stable
+
   log "Smoke tests passed for app $APP_NAME"
 }
 
