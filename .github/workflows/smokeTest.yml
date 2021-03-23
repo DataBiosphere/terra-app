@@ -21,8 +21,7 @@ jobs:
       matrix:
        app: [ucsc_genome_browser]
     env:
-      APP_DIR_NAME: ${{ matrix.app }}
-      TMPDIR: /temp
+      APP_NAME: ${{ matrix.app }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -33,6 +32,7 @@ jobs:
         run: |
           mkdir test-dir
           touch ./test-dir/temp.txt
+          sudo apt-get install jq
           sudo snap install helm --classic
           sudo snap install yq
 
@@ -44,17 +44,15 @@ jobs:
           minikube version: 'v1.16.0'
           kubernetes version: 'v1.19.2'
           github token: ${{ secrets.GITHUB_TOKEN }}
-          start args: 'start --vm=true --mount --mount-string="./test-dir:/data"'
-        
-      - name: Interact with the cluster
-        run: |
-          echo "app descriptor is: $APP_DIR_NAME"
-          kubectl get nodes 
-          ls /
-          ls /temp
-          ./terra-app-local.sh install -f ./apps/$APP_DIR_NAME/app.yaml
+          # TODO: how do i use a variable for this? do we need to do this in the shell? 
+          start args: 'start --vm=true' #--mount --mount-string="./test-dir:/data"
           
-      - name: Run local app 
-        run:
-            echo test
+      - name: Run smoke test on app 
+        run: ./test/smoke-test.sh $APP_NAME
+
+      - name: Install minikube test
+        run: |
+          curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-arm64
+          sudo install minikube-linux-arm64 /usr/local/bin/minikube
+          which minikube
 

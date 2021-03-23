@@ -154,6 +154,7 @@ install_app() {
    
     # parse information out of the descriptor
     _appname=$(yq e '.name' "${_filename}")
+    # Do not change this namespace convention without modifying the github action
     _namespace="${_appname}-ns"
     local _ksa="${_appname}-ksa"
     local _baseurl=$(yq e '.services.*.baseUrl' "${_filename}")
@@ -188,7 +189,8 @@ install_app() {
     # build values yaml from app descriptor 
     # TODO note this supports at most 3 EVs; there is probably a nicer way but 
     # I couldn't figure out how to make yq map over keys.
-    local _tmp_values=$(mktemp)
+    touch ./test/$(date +%s)-temp.tmp
+    local _tmp_values="./test/$(date +%s)-temp.tmp"
     yq e \
       ".nameOverride=.name \
       | .image.image=.services.*.image \
@@ -239,6 +241,8 @@ install_app() {
       "${_appname}" \
       terra-app-chart/ \
       -f "${_tmp_values}"
+
+    rm "${_tmp_values}"
 }
 
 main() {

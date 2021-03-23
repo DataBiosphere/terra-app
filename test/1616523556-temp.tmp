@@ -1,0 +1,40 @@
+author: workbench-interactive-analysis@broadinstitute.org
+description: |
+  Jupyter
+version: 1.0.14
+nameOverride: jupyter
+image:
+  image: "us.gcr.io/broad-dsp-gcr-public/terra-jupyter-gatk:1.0.14"
+  port: 8000
+  baseUrl: "/jupyter/"
+  command: ["/bin/sh", "-c"]
+  args: ["sed -i 's/\\/notebooks/\\/jupyter/' $JUPYTER_HOME/jupyter_notebook_config.py ; /usr/local/bin/jupyter notebook", ""]
+ingress:
+  hosts:
+    - host: k8s.app.info
+      paths:
+        - /jupyter/
+persistence:
+  hostPath: /data
+configs:
+  WORKSPACE_NAME: "my-ws"
+  WORKSPACE_NAMESPACE: "my-proj"
+  unset0: unset0
+  unset1: unset1
+  unset2: unset2
+extraEnv:
+  - name: WORKSPACE_NAME
+    valueFrom:
+      configMapKeyRef:
+        name: jupyter-configs
+        key: WORKSPACE_NAME
+  - name: WORKSPACE_NAMESPACE
+    valueFrom:
+      configMapKeyRef:
+        name: jupyter-configs
+        key: WORKSPACE_NAMESPACE
+  - name: unset0
+    valueFrom:
+      configMapKeyRef:
+        name: jupyter-configs
+        key: unset0

@@ -98,7 +98,7 @@ This repo contains a `terra-app-local.sh` script which can launch apps on a loca
 Before running the script:
 1. Install `minikube` according to instructions [here](https://minikube.sigs.k8s.io/docs/start/).
 2. Start `minikube` service.
-   a. On Mac (Catalina) I start it with the command:
+   a. On Mac (Catalina) I start it with the command (when NOT connected to a VPN):
      ```
      minikube start --vm=true --mount --mount-string="~/data:/data"
      ```
