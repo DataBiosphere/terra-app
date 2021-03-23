@@ -189,8 +189,8 @@ install_app() {
     # build values yaml from app descriptor 
     # TODO note this supports at most 3 EVs; there is probably a nicer way but 
     # I couldn't figure out how to make yq map over keys.
-    touch ./test/$(date +%s)-temp.tmp
-    local _tmp_values="./test/$(date +%s)-temp.tmp"
+    local _tmp_values="$(date +%s)-temp.tmp"
+    touch _tmp_values
     yq e \
       ".nameOverride=.name \
       | .image.image=.services.*.image \

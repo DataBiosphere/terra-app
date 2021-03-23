@@ -1,4 +1,7 @@
 #!/bin/bash
+# This program depends on terra-app-local.sh, and all the dependencies listed there
+# This program is intended to be run in an automated workflow to smoke test all 'supported' apps
+# If `terra-app-local.sh` is working for a given app, this script should as well 
 # Usage ./smoke-test.sh [app-name]
 # Should be run at the top-level folder
 # See ci-config.jsontop-level keys for valid app names
