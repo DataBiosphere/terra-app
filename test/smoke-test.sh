@@ -36,10 +36,10 @@ function is_pod_running() {
   local POD_STATUS=$(kubectl get pod -n $APP_NAME-ns | grep $APP_NAME | awk '{print $3}')
   log "pod status is currently $POD_STATUS"
   if [[ $POD_STATUS == "Running" ]]; then
-    log "Successfully polled pod for $APP_NAME until Running status"
+    log "Successfully polled pod for $APP_NAME until Running status."
   else
-    log "Pod is not in Running status yet, exiting 1"
-    exit 1
+    log "Pod is not in Running status yet, returning exit code 1"
+    return 1
   fi
 }
 
