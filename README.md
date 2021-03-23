@@ -87,7 +87,7 @@ Example apps can be found in this repo under [apps](/apps). View the following f
 
 [jupyter](apps/jupyter)
 
-[rstduio](apps/rstduio)
+[rstduio](apps/rstudio)
 
 [ucsc_genome_browser](apps/ucsc_genome_browser)
 
@@ -132,9 +132,14 @@ Example:
 $ ./terra-app-local.sh install -f /apps/jupyter/app.yaml
 ```
 
+# Testing
+The script detailed in the local launching section is also used to smoke-test supported apps on merges to this repo. If you are adding an app, and want it to be automatically tested, be sure to add it to the `app` `matrix` in the github action file. 
+
+These tests DO NOT test against Terra/Leonardo. It may be desirable to have a dedicated test in leonardo pegged to a specific version of an app.yaml. This is not possible until we begin publishing and versioning these app yaml. See https://broadworkbench.atlassian.net/browse/IA-2495.  
+
 # Launching an App on Terra
  
-TODO :)
+Leonardo has an endpoint that takes an app descriptor and various arguments. See the [swagger](https://leonardo.dsde-dev.broadinstitute.org/#/apps/createApp) documentation for the endpoint, and the associated `CreateAppRequest` schema. 
 
 # Helm Chart
 
