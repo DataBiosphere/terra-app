@@ -52,7 +52,7 @@ jobs:
           
       - name: Run smoke test on app 
         run: |
-          sudo echo "$(minikube ip) $(jq -r .hostname < test/app-args.json)" | sudo tee -a /etc/hosts
+          sudo echo "$(minikube ip) $(jq -r .hostname < ci-config.json)" | sudo tee -a /etc/hosts
           ./test/smoke-test.sh $APP_NAME
 
 # TODO: the below works and is relevant, we should aim to move away from minikube plugin

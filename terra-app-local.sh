@@ -163,7 +163,7 @@ install_app() {
     else
         local _ingresspath="${_baseurl}" 
     fi
-    _hostname=$(jq -r .hostname < test/app-args.json)
+    _hostname=$(jq -r .hostname < ci-config.json)
     
     if [ -z "${_appname}" ] | [ "${_appname}" == "null" ] ; then
         echo "Error: could not parse app name from file '${_filename}'."

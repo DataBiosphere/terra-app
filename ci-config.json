@@ -1,0 +1,13 @@
+{
+    "hostname": "k8s.app.info",
+    "jupyter": {
+        "minikube-args": "--vm=true",
+        "startcmd": "./terra-app-local.sh install -f ./apps/jupyter/app.yaml",
+        "expected-status-code": 301
+    },
+    "ucsc-genome-browser": {
+        "minikube-args": "--vm=true",
+        "startcmd": "./terra-app-local.sh install -f ./apps/ucsc_genome_browser/app.yaml",
+        "expected-status-code": 200
+    }
+}

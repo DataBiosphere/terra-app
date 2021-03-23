@@ -1,7 +1,7 @@
 #!/bin/bash
 # Usage ./smoke-test.sh [app-name]
 # Should be run at the top-level folder
-# See app-args.json top-level keys for valid app names
+# See ci-config.jsontop-level keys for valid app names
 
 set -e
 
@@ -16,17 +16,17 @@ function run_test() {
   APP_NAME=$1
 
   # Extract command from config file as an array
-  local START_CMD=($(jq -r --arg key "$APP_NAME" '.[$key].startcmd' < ./test/app-args.json))
+  local START_CMD=($(jq -r --arg key "$APP_NAME" '.[$key].startcmd' < ci-config.json))
   log "starting app $APP_NAME with cmd "$START_CMD". Will retry 5 times."
   # Execute the command 
   retry 5 ${START_CMD[@]}
 
   log "Beginning to poll until pod enters Running status"
-  retry 10 is_pod_running
+  retry 9 is_pod_running
 
   #TODO: more verification on app now that it is running
   log "Curling the app"
-  curl -I $(jq -r .hostname < test/app-args.json)/$APP_NAME
+  curl -I $(jq -r .hostname < ci-config.json)/$APP_NAME
 
   verify_app
   log "Smoke tests passed for app $APP_NAME"
@@ -44,12 +44,13 @@ function is_pod_running() {
 }
 
 function verify_app() {
-  local URL=$(jq -r .hostname < test/app-args.json)/$APP_NAME
-  local STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" $URL)
-  if [[ $STATUS_CODE -eq 200 ]]; then 
-    log "Status code $URL endpoint is 200"
+  local EXPECTED_STATUS_CODE=$(jq -r --arg key1 "$APP_NAME" '.[$key1]."expected-status-code"' < ci-config.json)
+  local URL=$(jq -r .hostname < ci-config.json)/$APP_NAME
+  local ACTUAL_STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" $URL)
+  if [[ $ACTUAL_STATUS_CODE -eq $EXPECTED_STATUS_CODE ]]; then 
+    log "SUCCESS. Status code for app $APP_NAME at url $URL is as expected: $ACTUAL_STATUS_CODE"
   else 
-    log "Status code for $URL is $STATUS_CODE. Test failed."
+    log "FAILED. Status code for app $APP_NAME at url $URL is $ACTUAL_STATUS_CODE. Expected $EXPECTED_STATUS_CODE."
     exit 1
   fi
 }
