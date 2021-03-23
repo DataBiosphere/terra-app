@@ -26,9 +26,10 @@ function run_test() {
 
   #TODO: more verification on app now that it is running
   log "Curling the app"
-  curl -I $(minikube ip)/$APP_NAME
+  curl -I $(jq -r .hostname < test/app-args.json)/$APP_NAME
   #TODO: verify status code from above when apps are stable
 
+  verify_app
   log "Smoke tests passed for app $APP_NAME"
 }
 
@@ -37,10 +38,20 @@ function is_pod_running() {
   log "pod status is currently $POD_STATUS"
   if [[ $POD_STATUS == "Running" ]]; then
     log "Successfully polled pod for $APP_NAME until Running status"
-    return 0
   else
     log "Pod is not in Running status yet, exiting 1"
-    return 1
+    exit 1
+  fi
+}
+
+function verify_app() {
+  local URL=$(jq -r .hostname < test/app-args.json)/$APP_NAME
+  local STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" $URL)
+  if [[ $STATUS_CODE -eq 200 ]]; then 
+    log "Status code $URL endpoint is 200"
+  else 
+    log "Status code for $URL is $STATUS_CODE. Test failed."
+    exit 1
   fi
 }
 

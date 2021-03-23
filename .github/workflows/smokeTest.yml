@@ -49,7 +49,9 @@ jobs:
           start args: 'start --vm=true' #--mount --mount-string="./test-dir:/data"
           
       - name: Run smoke test on app 
-        run: ./test/smoke-test.sh $APP_NAME
+        run: |
+          echo "$(minikube ip) $(jq -r .hostname < test/app-args.json)" >> /etc/hosts
+          ./test/smoke-test.sh $APP_NAME
 
 # TODO: the below works and is relevant, we should aim to move away from minikube plugin
       # - name: Install minikube test

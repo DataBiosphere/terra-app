@@ -1,4 +1,5 @@
 {
+    "hostname": "k8s.app.info",
     "jupyter": {
         "minikube-args": "--vm=true",
         "startcmd": "./terra-app-local.sh install -f ./apps/jupyter/app.yaml"

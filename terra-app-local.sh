@@ -163,7 +163,8 @@ install_app() {
     else
         local _ingresspath="${_baseurl}" 
     fi
-    _hostname="k8s.app.info"
+    #TODO
+    _hostname=$(jq -r .hostname < test/app-args.json)
     
     if [ -z "${_appname}" ] | [ "${_appname}" == "null" ] ; then
         echo "Error: could not parse app name from file '${_filename}'."
