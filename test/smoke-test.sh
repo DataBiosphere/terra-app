@@ -16,7 +16,7 @@ function run_test() {
   APP_NAME=$1
 
   # Extract command from config file as an array
-  local START_CMD=($(jq -r '."$APP_NAME".startcmd' < ./test/app-args.json))
+  local START_CMD=($(jq -r --arg key "$APP_NAME" '.[$key].startcmd' < ./test/app-args.json))
   log "starting app $APP_NAME with cmd "$START_CMD". Will retry 5 times."
   # Execute the command 
   retry 5 ${START_CMD[@]}
@@ -27,11 +27,10 @@ function run_test() {
   #TODO: more verification on app now that it is running
   log "Curling the app"
   curl -I $(minikube ip)/$APP_NAME
-  #TODO: verify status code when apps are stable
+  #TODO: verify status code from above when apps are stable
 
   log "Smoke tests passed for app $APP_NAME"
 }
-
 
 function is_pod_running() {
   local POD_STATUS=$(kubectl get pod -n $APP_NAME-ns | grep $APP_NAME | awk '{print $3}')
