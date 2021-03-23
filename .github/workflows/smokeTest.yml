@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
       # add new apps to be smoke tested to the array below
-       app: [jupyter] #,ucsc_genome_browser
+       app: [jupyter, ucsc_genome_browser]
     env:
       APP_NAME: ${{ matrix.app }}
     # Steps represent a sequence of tasks that will be executed as part of the job
