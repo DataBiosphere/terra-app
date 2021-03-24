@@ -13,7 +13,7 @@
     "rstudio": {
         "minikube-args": "--vm=true",
         "startcmd": "./terra-app-local.sh install -f ./apps/rstudio/app.yaml",
-        "expected-status-code": 200
+        "expected-status-code": 302
     },
     "cirrocumulus": {
         "minikube-args": "--vm=true --mount --mount-string='./test:/data'",

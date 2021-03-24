@@ -35,13 +35,18 @@ jobs:
       - name: Setup data for tests and perform system installs
         run: |
           sudo apt-get install jq
-          sudo snap install helm --classic
-          sudo snap install yq
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+          wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY} -O /usr/bin/yq
+          chmod +x /usr/bin/yq
+          
+        # sudo snap install helm --classic
+        # sudo snap install yq
 
       - name: Get Minikube args
         run: |
           ARGS=$(jq -r --arg key1 "$APP_NAME" '.[$key1]."minikube-args"' < ci-config.json)
           echo "MINIKUBE_ARGS=$ARGS" >> $GITHUB_ENV
+          
       # we currently use this pre-made action for minikube https://github.com/marketplace/actions/setup-minikube-kubernetes-cluster
       # it supports our use case at the time of writing, but there may come a time when we want to set it up ourselves
       - name: Setup Minikube

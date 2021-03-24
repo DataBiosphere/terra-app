@@ -31,7 +31,7 @@ function run_test() {
   log "Curling the app"
   curl -I $(jq -r .hostname < ci-config.json)/$APP_NAME
 
-  verify_app
+  retry 3 verify_app
   log "Smoke tests passed for app $APP_NAME"
 }
 
@@ -52,9 +52,10 @@ function verify_app() {
   local ACTUAL_STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" $URL)
   if [[ $ACTUAL_STATUS_CODE -eq $EXPECTED_STATUS_CODE ]]; then 
     log "SUCCESS. Status code for app $APP_NAME at url $URL is as expected: $ACTUAL_STATUS_CODE"
+    return 0
   else 
     log "FAILED. Status code for app $APP_NAME at url $URL is $ACTUAL_STATUS_CODE. Expected $EXPECTED_STATUS_CODE."
-    exit 1
+    return 1
   fi
 }
 
