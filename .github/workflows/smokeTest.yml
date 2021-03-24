@@ -42,7 +42,7 @@ jobs:
       - name: Get Minikube args
         run: |
           ARGS=$(jq -r --arg key1 "$APP_NAME" '.[$key1]."minikube-args"' < ci-config.json)
-          echo "MINIKUBE_ARGS=$ARGS" >> $GITHUB_ENV
+          echo "MINIKUBE_ARGS=--no-vtx-check --driver=none $ARGS" >> $GITHUB_ENV
 
       - name: Minikube install and start
         run : |
@@ -50,12 +50,12 @@ jobs:
          curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
          sudo install minikube-linux-amd64 /usr/bin/minikube
          sudo chmod +x /usr/bin/minikube
-         minikube start --no-vtx-check --driver=none $(jq -r --arg key1 "$APP_NAME" '.[$key1]."minikube-args"' < ci-config.json) 
-
-#sudo apt-get install virtualbox
+         echo "debug ls below"
+         ls ./test
+         minikube start ${{ env.MINIKUBE_ARGS }}
           
-      # we currently use this pre-made action for minikube https://github.com/marketplace/actions/setup-minikube-kubernetes-cluster
-      # it supports our use case at the time of writing, but there may come a time when we want to set it up ourselves
+      # below is a plugin for minikube if maintaining the above gets arduous https://github.com/marketplace/actions/setup-minikube-kubernetes-cluster
+      # it supports our use case at the time of writing, but it is not clear exactly what it is passing to `minikube start`
       # - name: Setup Minikube
       #   uses: manusa/actions-setup-minikube@v2.3.1
       #   with:

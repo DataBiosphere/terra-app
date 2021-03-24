@@ -23,9 +23,7 @@ function run_test() {
   local START_CMD=($(jq -r --arg key "$APP_NAME" '.[$key].startcmd' < ci-config.json))
   log "starting app $APP_NAME with cmd (${START_CMD[@]}) with retries"
   # Execute the command 
-  set -x
   retry 5 ${START_CMD[@]}
-  set +x
 
   log "Beginning to poll until pod enters Running status"
   retry 9 is_pod_running
