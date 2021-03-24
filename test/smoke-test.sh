@@ -31,7 +31,7 @@ function run_test() {
   log "Curling the app"
   curl -I $(jq -r .hostname < ci-config.json)/$APP_NAME
 
-  retry 3 verify_app
+  retry 5 verify_app
   log "Smoke tests passed for app $APP_NAME"
 }
 
