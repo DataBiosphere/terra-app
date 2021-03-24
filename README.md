@@ -81,7 +81,7 @@ services:
 
 Example apps can be found in this repo under [apps](/apps). View the following for more details:
 
-If an app is in this list, it should have a working smoke test run on PRs. See the testing section forr details 
+If an app is in this list, it should have a working smoke test run on PRs. See the testing section for details 
 
 [cellxgene](apps/cellxgene)
 

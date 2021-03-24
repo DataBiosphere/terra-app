@@ -190,7 +190,7 @@ install_app() {
     # TODO note this supports at most 3 EVs; there is probably a nicer way but 
     # I couldn't figure out how to make yq map over keys.
     local _tmp_values="$(date +%s)-temp.tmp"
-    touch _tmp_values
+    touch "${_tmp_values}"
     yq e \
       ".nameOverride=.name \
       | .image.image=.services.*.image \

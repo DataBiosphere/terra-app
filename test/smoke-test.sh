@@ -4,7 +4,7 @@
 # If `terra-app-local.sh` is working for a given app, this script should as well 
 # Usage ./smoke-test.sh [app-name]
 # Should be run at the top-level folder
-# See ci-config.jsontop-level keys for valid app names
+# See ci-config.json kutop-level keys for valid app names
 
 set -e
 
@@ -54,7 +54,8 @@ function verify_app() {
     log "SUCCESS. Status code for app $APP_NAME at url $URL is as expected: $ACTUAL_STATUS_CODE"
     return 0
   else 
-    log "FAILED. Status code for app $APP_NAME at url $URL is $ACTUAL_STATUS_CODE. Expected $EXPECTED_STATUS_CODE."
+    log "FAILED. Status code for app $APP_NAME at url $URL is $ACTUAL_STATUS_CODE. Expected $EXPECTED_STATUS_CODE. Printing pod details..."
+    kubectl describe pod -n $APP_NAME-ns   
     return 1
   fi
 }
