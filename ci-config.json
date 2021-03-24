@@ -16,12 +16,12 @@
         "expected-status-code": 302
     },
     "cirrocumulus": {
-        "minikube-args": "--vm=true --mount --mount-string='./test:/data'",
+        "minikube-args": "--vm=true --mount-string='./test:/data'",
         "startcmd": "./terra-app-local.sh install -f ./apps/cirrocumulus/app.yaml -a /data/test.data",
         "expected-status-code": 200
     },
     "cellxgene": {
-        "minikube-args": "--vm=true --mount --mount-string='./test:/data'",
+        "minikube-args": "--vm=true --mount-string='./test:/data'",
         "startcmd": "./terra-app-local.sh install -f ./apps/cellxgene/app.yaml -a /data/test_data.h5ad",
         "expected-status-code": 200
     }
