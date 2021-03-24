@@ -38,7 +38,7 @@ jobs:
           sudo snap install yq
 
       # TODO: the below works and is relevant, we should aim to move away from minikube plugin
-      - name: Install minikube test
+      - name: Install and start minikube
         run: |
           curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-arm64
           sudo install minikube-linux-arm64 /usr/local/bin/minikube
