@@ -1,28 +1,25 @@
 {
     "hostname": "k8s.app.info",
     "jupyter": {
-        "has-mount": false,
         "startcmd": "./terra-app-local.sh install -f ./apps/jupyter/app.yaml",
         "expected-status-code": 301
     },
     "ucsc-genome-browser": {
-        "minikube-args": false,
         "startcmd": "./terra-app-local.sh install -f ./apps/ucsc_genome_browser/app.yaml",
         "expected-status-code": 200
     },
     "rstudio": {
-        "minikube-args": false,
         "startcmd": "./terra-app-local.sh install -f ./apps/rstudio/app.yaml",
         "expected-status-code": 302
     },
     "cirrocumulus": {
-        "has-mount": true,
-        "startcmd": "./terra-app-local.sh install -f ./apps/cirrocumulus/app.yaml -a /data/test.data",
+        "mount-file": "test/test.data",
+        "startcmd": "./terra-app-local.sh install -f ./apps/cirrocumulus/app.yaml",
         "expected-status-code": 200
     },
     "cellxgene": {
-        "has-mount": true,
-        "startcmd": "./terra-app-local.sh install -f ./apps/cellxgene/app.yaml -a /data/test_data.h5ad",
+        "mount-file": "test/test_data.h5ad",
+        "startcmd": "./terra-app-local.sh install -f ./apps/cellxgene/app.yaml",
         "expected-status-code": 200
     }
 }

@@ -44,9 +44,6 @@ jobs:
       - name: Get Minikube args
         run: |
           ARGS=(--no-vtx-check --driver=none --vm=true)
-          if [[ $(jq -r --arg key1 "$APP_NAME" '.[$key1]."has-mount"' < ci-config.json) == "true" ]]; 
-            then ARGS+=("--mount --mount-string=$GITHUB_WORKSPACE/test:/data"); 
-          fi
           echo "MINIKUBE_ARGS=${ARGS[@]}" >> $GITHUB_ENV
 
       - name: Minikube install and start
@@ -55,8 +52,7 @@ jobs:
          curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
          sudo install minikube-linux-amd64 /usr/bin/minikube
          sudo chmod +x /usr/bin/minikube
-         minikube start ${{ env.MINIKUBE_ARGS }}
-         minikube mount $GITHUB_WORKSPACE/test:/data
+         minikube start --no-vtx-check --driver=none --vm=true
           
       # below is a plugin for minikube if maintaining the above gets arduous https://github.com/marketplace/actions/setup-minikube-kubernetes-cluster
       # it supports our use case at the time of writing, but it is not clear exactly what it is passing to `minikube start`

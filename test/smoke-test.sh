@@ -2,7 +2,8 @@
 # This program depends on terra-app-local.sh, and all the dependencies listed there
 # This program is intended to be run in an automated workflow to smoke test all 'supported' apps
 # If `terra-app-local.sh` is working for a given app, this script should as well.
-# To run locally for an app, you and start minikube with the appropriate args and then add the output of `echo "$(minikube ip) $(jq -r .hostname < ci-config.json)"` to /etc/hosts
+#   It is NOT POSSIBLE to run this locally on MAC because it does not support the only minikube driver (`none`) allowed in github actions
+#   See https://github.com/actions/virtual-environments/issues/183https://github.com/actions/virtual-environments/issues/183
 # Usage ./smoke-test.sh [app-name]
 # Should be run at the top-level folder
 # See ci-config.json top-level keys for valid app names
@@ -21,8 +22,12 @@ function run_test() {
 
   # Extract command from config file as an array
   local START_CMD=($(jq -r --arg key "$APP_NAME" '.[$key].startcmd' < ci-config.json))
+  local MOUNT_FILE=$(jq -r --arg key1 "$APP_NAME" '.[$key1]."mount-file"' < ci-config.json)
+  if [[ -z MOUNT_FILE ]]; then 
+    START_CMD+=("-a $PWD/$MOUNT_FILE"); 
+  fi
+  
   log "starting app $APP_NAME with cmd (${START_CMD[@]}) with retries"
-  # Execute the command 
   retry 5 ${START_CMD[@]}
 
   log "Beginning to poll until pod enters Running status"
