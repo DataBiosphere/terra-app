@@ -38,21 +38,28 @@ jobs:
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           sudo wget https://github.com/mikefarah/yq/releases/download/v4.6.1/yq_linux_amd64 -O /usr/bin/yq
           sudo chmod +x /usr/bin/yq
-          
+
       - name: Get Minikube args
         run: |
           ARGS=$(jq -r --arg key1 "$APP_NAME" '.[$key1]."minikube-args"' < ci-config.json)
           echo "MINIKUBE_ARGS=$ARGS" >> $GITHUB_ENV
+
+      - name: Minikube install and start
+        run : |
+         curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+         sudo install minikube-linux-amd64 /usr/local/bin/minikube
+         sudo chmod +x /usr/local/bin/minikube
+         minikube start $(jq -r --arg key1 "$APP_NAME" '.[$key1]."minikube-args"' < ci-config.json)
           
       # we currently use this pre-made action for minikube https://github.com/marketplace/actions/setup-minikube-kubernetes-cluster
       # it supports our use case at the time of writing, but there may come a time when we want to set it up ourselves
-      - name: Setup Minikube
-        uses: manusa/actions-setup-minikube@v2.3.1
-        with:
-          minikube version: 'v1.16.0'
-          kubernetes version: 'v1.19.2'
-          github token: ${{ secrets.GITHUB_TOKEN }}
-          start args: "${{ env.MINIKUBE_ARGS }}"
+      # - name: Setup Minikube
+      #   uses: manusa/actions-setup-minikube@v2.3.1
+      #   with:
+      #     minikube version: 'v1.16.0'
+      #     kubernetes version: 'v1.19.2'
+      #     github token: ${{ secrets.GITHUB_TOKEN }}
+      #     start args: "${{ env.MINIKUBE_ARGS }}"
           
       - name: Run smoke test on app 
         run: |

@@ -21,7 +21,7 @@ function run_test() {
 
   # Extract command from config file as an array
   local START_CMD=($(jq -r --arg key "$APP_NAME" '.[$key].startcmd' < ci-config.json))
-  log "starting app $APP_NAME with cmd ($START_CMD) with retries"
+  log "starting app $APP_NAME with cmd (${START_CMD[@]}) with retries"
   # Execute the command 
   set -x
   retry 5 ${START_CMD[@]}
