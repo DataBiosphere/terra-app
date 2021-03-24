@@ -40,23 +40,29 @@ jobs:
       # TODO: the below works and is relevant, we should aim to move away from minikube plugin
       - name: Install and start minikube
         run: |
-          curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-arm64
-          sudo install minikube-linux-arm64 /usr/local/bin/minikube
+          grep -E --color 'vmx|svm' /proc/cpuinfo 
+          curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 \
+          chmod +x minikube
+          sudo mkdir -p /usr/local/bin/
+          sudo install minikube /usr/local/bin/
           which minikube
           MINIKUBE_ARGS=$(jq -r --arg key1 "$APP_NAME" '.[$key1]."minikube-args"' < ci-config.json)
           echo "Starting minikube with args: $MINIKUBE_ARGS"
-          minikube start $MINIKUBE_ARGS
 
+    # minikube start $MINIKUBE_ARGS
+      - name: Get Minikube args
+        run: |
+          echo ::set-env name=MINIKUBE_ARGS::$(jq -r --arg key1 "$APP_NAME" '.[$key1]."minikube-args"' < ci-config.json)'
       # we currently use this pre-made action for minikube https://github.com/marketplace/actions/setup-minikube-kubernetes-cluster
-      # # it supports our use case at the time of writing, but there may come a time when we want to set it up ourselves
-      # - name: Setup Minikube
-      #   uses: manusa/actions-setup-minikube@v2.3.1
-      #   with:
-      #     minikube version: 'v1.16.0'
-      #     kubernetes version: 'v1.19.2'
-      #     github token: ${{ secrets.GITHUB_TOKEN }}
-      #     # TODO: how do i use a variable for this? do we need to do this in the shell? 
-      #     start args: 'start --vm=true' #--mount --mount-string="./test:/data"
+      # it supports our use case at the time of writing, but there may come a time when we want to set it up ourselves
+      - name: Setup Minikube
+        uses: manusa/actions-setup-minikube@v2.3.1
+        with:
+          minikube version: 'v1.16.0'
+          kubernetes version: 'v1.19.2'
+          github token: ${{ secrets.GITHUB_TOKEN }}
+          # TODO: how do i use a variable for this? do we need to do this in the shell? 
+          start args: ${{ env.MINIKUBE_ARGS }}
           
       - name: Run smoke test on app 
         run: |
