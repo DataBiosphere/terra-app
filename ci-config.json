@@ -9,5 +9,20 @@
         "minikube-args": "--vm=true",
         "startcmd": "./terra-app-local.sh install -f ./apps/ucsc_genome_browser/app.yaml",
         "expected-status-code": 200
+    },
+    "rstudio": {
+        "minikube-args": "--vm=true",
+        "startcmd": "./terra-app-local.sh install -f ./apps/rstudio/app.yaml",
+        "expected-status-code": 200
+    },
+    "cirrocumulus": {
+        "minikube-args": "--vm=true --mount --mount-string='./test:/data'",
+        "startcmd": "./terra-app-local.sh install -f ./apps/cirrocumulus/app.yaml -a /data/test.data",
+        "expected-status-code": 200
+    },
+    "cellxgene": {
+        "minikube-args": "--vm=true --mount --mount-string='./test:/data'",
+        "startcmd": "./terra-app-local.sh install -f ./apps/cellxgene/app.yaml -a /data/test.data",
+        "expected-status-code": 200
     }
 }

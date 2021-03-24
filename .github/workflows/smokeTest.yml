@@ -22,7 +22,7 @@ jobs:
       fail-fast: false
       # add new apps to be smoke tested to the array below
       matrix:
-       app: [jupyter, ucsc-genome-browser]
+       app: [jupyter, ucsc-genome-browser, rstudio, cellxgene, cirrocumulus]
     env:
       APP_NAME: ${{ matrix.app }}
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -31,24 +31,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      # Snap is of questionable stability... consider retrying or installing from a more reliable source if issues occur
       - name: Setup data for tests and perform system installs
         run: |
           sudo apt-get install jq
           sudo snap install helm --classic
           sudo snap install yq
 
-      # # TODO: the below works and is relevant, we should aim to move away from minikube plugin
-      # - name: Install and start minikube
-      #   run: |
-      #     curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 
-      #     chmod +x minikube
-      #     sudo mkdir -p /usr/local/bin/
-      #     sudo install minikube /usr/local/bin/
-      #     which minikube
-      #     MINIKUBE_ARGS=$(jq -r --arg key1 "$APP_NAME" '.[$key1]."minikube-args"' < ci-config.json)
-      #     echo "Starting minikube with args: $MINIKUBE_ARGS"
-
-    # minikube start $MINIKUBE_ARGS
       - name: Get Minikube args
         run: |
           ARGS=$(jq -r --arg key1 "$APP_NAME" '.[$key1]."minikube-args"' < ci-config.json)
@@ -61,7 +50,6 @@ jobs:
           minikube version: 'v1.16.0'
           kubernetes version: 'v1.19.2'
           github token: ${{ secrets.GITHUB_TOKEN }}
-          # TODO: how do i use a variable for this? do we need to do this in the shell? 
           start args: "${{ env.MINIKUBE_ARGS }}"
           
       - name: Run smoke test on app 
