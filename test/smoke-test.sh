@@ -27,9 +27,6 @@ function run_test() {
     START_CMD+=("-a $MOUNT_FILE"); 
   fi
 
-  log "printing github_workspace: $GITHUB_WORKSPACE"
-  log "printing PWD: $PWD"
-
   log "starting app $APP_NAME with cmd (${START_CMD[@]}) with retries"
   retry 5 ${START_CMD[@]}
 
