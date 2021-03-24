@@ -39,11 +39,13 @@ jobs:
           sudo wget https://github.com/mikefarah/yq/releases/download/v4.6.1/yq_linux_amd64 -O /usr/bin/yq
           sudo chmod +x /usr/bin/yq
 
+      # If this step gets overly complex, consider splitting it up
+      # It would be preferable to have this elsewhere, but only the workflow knows the github workspace, and making the mount-string a relative path is problematic
       - name: Get Minikube args
         run: |
           ARGS=(--no-vtx-check --driver=none --vm=true)
           if [[ $(jq -r --arg key1 "$APP_NAME" '.[$key1]."has-mount"' < ci-config.json) == "true" ]]; 
-            then ARGS+=("--mount --mount-string=$GITHUB_WORKSPACE/test/:/data"); 
+            then ARGS+=("--mount --mount-string=$GITHUB_WORKSPACE/test:/data"); 
           fi
           echo "MINIKUBE_ARGS=${ARGS[@]}" >> $GITHUB_ENV
 
