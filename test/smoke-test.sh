@@ -2,6 +2,7 @@
 # This program depends on terra-app-local.sh, and all the dependencies listed there
 # This program is intended to be run in an automated workflow to smoke test all 'supported' apps
 # If `terra-app-local.sh` is working for a given app, this script should as well 
+# To run locally, you must manually add the  entry  printed to /etc/hosts file as described  in `terra-app-local.sh`
 # Usage ./smoke-test.sh [app-name]
 # Should be run at the top-level folder
 # See ci-config.json kutop-level keys for valid app names
@@ -20,16 +21,12 @@ function run_test() {
 
   # Extract command from config file as an array
   local START_CMD=($(jq -r --arg key "$APP_NAME" '.[$key].startcmd' < ci-config.json))
-  log "starting app $APP_NAME with cmd "$START_CMD". Will retry 5 times."
+  log "starting app $APP_NAME with cmd ($START_CMD). Will retry 5 times."
   # Execute the command 
   retry 5 ${START_CMD[@]}
 
   log "Beginning to poll until pod enters Running status"
   retry 9 is_pod_running
-
-  #TODO: more verification on app now that it is running
-  log "Curling the app"
-  curl -I $(jq -r .hostname < ci-config.json)/$APP_NAME
 
   retry 5 verify_app
   log "Smoke tests passed for app $APP_NAME"
@@ -42,7 +39,6 @@ function is_pod_running() {
     log "Successfully polled pod for $APP_NAME until Running status."
   else
     log "Pod is not in Running status yet, returning exit code 1. Printing pod logs..."
-    print_pod_logs
     return 1
   fi
 }
