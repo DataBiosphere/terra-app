@@ -41,7 +41,8 @@ function is_pod_running() {
   if [[ $POD_STATUS == "Running" ]]; then
     log "Successfully polled pod for $APP_NAME until Running status."
   else
-    log "Pod is not in Running status yet, returning exit code 1"
+    log "Pod is not in Running status yet, returning exit code 1. Printing pod logs..."
+    print_pod_logs
     return 1
   fi
 }
@@ -54,14 +55,18 @@ function verify_app() {
     log "SUCCESS. Status code for app $APP_NAME at url $URL is as expected: $ACTUAL_STATUS_CODE"
     return 0
   else 
-    log "FAILED. Status code for app $APP_NAME at url $URL is $ACTUAL_STATUS_CODE. Expected $EXPECTED_STATUS_CODE. Printing pod details..."
-    kubectl describe pod -n $APP_NAME-ns   
+    log "FAILED. Status code for app $APP_NAME at url $URL is $ACTUAL_STATUS_CODE. Expected $EXPECTED_STATUS_CODE. Printing pod logs.."
+    print_pod_logs
     return 1
   fi
 }
 
 function log() {
   echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $@"
+}
+
+function print_pod_logs {
+  kubectl logs -n $APP_NAME-ns $(kubectl get pod -n $APP_NAME-ns | grep -m 1 $APP_NAME | awk '{print $1}')
 }
 
 # Retry a command up to a specific number of times until it exits successfully,
