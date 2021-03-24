@@ -37,16 +37,16 @@ jobs:
           sudo snap install helm --classic
           sudo snap install yq
 
-      # TODO: the below works and is relevant, we should aim to move away from minikube plugin
-      - name: Install and start minikube
-        run: |
-          curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 \
-          chmod +x minikube
-          sudo mkdir -p /usr/local/bin/
-          sudo install minikube /usr/local/bin/
-          which minikube
-          MINIKUBE_ARGS=$(jq -r --arg key1 "$APP_NAME" '.[$key1]."minikube-args"' < ci-config.json)
-          echo "Starting minikube with args: $MINIKUBE_ARGS"
+      # # TODO: the below works and is relevant, we should aim to move away from minikube plugin
+      # - name: Install and start minikube
+      #   run: |
+      #     curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 
+      #     chmod +x minikube
+      #     sudo mkdir -p /usr/local/bin/
+      #     sudo install minikube /usr/local/bin/
+      #     which minikube
+      #     MINIKUBE_ARGS=$(jq -r --arg key1 "$APP_NAME" '.[$key1]."minikube-args"' < ci-config.json)
+      #     echo "Starting minikube with args: $MINIKUBE_ARGS"
 
     # minikube start $MINIKUBE_ARGS
       - name: Get Minikube args
