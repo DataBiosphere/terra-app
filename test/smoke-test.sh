@@ -24,7 +24,7 @@ function run_test() {
   local START_CMD=($(jq -r --arg key "$APP_NAME" '.[$key].startcmd' < ci-config.json))
   local MOUNT_FILE=$(jq -r --arg key1 "$APP_NAME" '.[$key1]."mount-file"' < ci-config.json)
   if [[ ! $MOUNT_FILE == "null" ]]; then 
-    START_CMD+=("-a $PWD/$MOUNT_FILE"); 
+    START_CMD+=("-a $MOUNT_FILE"); 
   fi
 
   log "printing github_workspace: $GITHUB_WORKSPACE"

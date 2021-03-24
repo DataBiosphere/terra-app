@@ -62,5 +62,7 @@ jobs:
           sudo echo "$(minikube ip) $(jq -r .hostname < ci-config.json)" | sudo tee -a /etc/hosts
           echo "printing github_workspace: $GITHUB_WORKSPACE"
           echo "printing PWD: $PWD"
+          sudo mkdir -p /data 
+          cp ./test/* /data
           ./test/smoke-test.sh $APP_NAME
 

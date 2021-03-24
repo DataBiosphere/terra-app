@@ -13,12 +13,12 @@
         "expected-status-code": 302
     },
     "cirrocumulus": {
-        "mount-file": "test/test.data",
+        "mount-file": "/data/test.data",
         "startcmd": "./terra-app-local.sh install -f ./apps/cirrocumulus/app.yaml",
         "expected-status-code": 200
     },
     "cellxgene": {
-        "mount-file": "test/test_data.h5ad",
+        "mount-file": "/data/test_data.h5ad",
         "startcmd": "./terra-app-local.sh install -f ./apps/cellxgene/app.yaml",
         "expected-status-code": 200
     }
