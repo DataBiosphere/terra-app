@@ -2,7 +2,7 @@
 # This program depends on terra-app-local.sh, and all the dependencies listed there
 # This program is intended to be run in an automated workflow to smoke test all 'supported' apps
 # If `terra-app-local.sh` is working for a given app, this script should as well.
-#   It is NOT POSSIBLE to run this locally on MAC because it does not support the only minikube driver (`none`) allowed in github actions
+#   It is NOT POSSIBLE to run this locally on MAC because it does not support the only minikube driver (`none`) allowed in github actions in conjunction with the mount requirement
 #   See https://github.com/actions/virtual-environments/issues/183https://github.com/actions/virtual-environments/issues/183
 # Usage ./smoke-test.sh [app-name]
 # Should be run at the top-level folder
@@ -26,6 +26,9 @@ function run_test() {
   if [[ ! $MOUNT_FILE == "null" ]]; then 
     START_CMD+=("-a $PWD/$MOUNT_FILE"); 
   fi
+
+  log 'printing github_workspace: $GITHUB_WORKSPACE'
+  log 'printing PWD: $PWD'
 
   log "starting app $APP_NAME with cmd (${START_CMD[@]}) with retries"
   retry 5 ${START_CMD[@]}

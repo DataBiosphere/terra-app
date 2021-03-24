@@ -39,13 +39,6 @@ jobs:
           sudo wget https://github.com/mikefarah/yq/releases/download/v4.6.1/yq_linux_amd64 -O /usr/bin/yq
           sudo chmod +x /usr/bin/yq
 
-      # If this step gets overly complex, consider splitting it up
-      # It would be preferable to have this elsewhere, but only the workflow knows the github workspace, and making the mount-string a relative path is problematic
-      - name: Get Minikube args
-        run: |
-          ARGS=(--no-vtx-check --driver=none --vm=true)
-          echo "MINIKUBE_ARGS=${ARGS[@]}" >> $GITHUB_ENV
-
       - name: Minikube install and start
         run : |
          sudo apt-get install conntrack
@@ -67,5 +60,7 @@ jobs:
       - name: Run smoke test on app 
         run: |
           sudo echo "$(minikube ip) $(jq -r .hostname < ci-config.json)" | sudo tee -a /etc/hosts
+          echo 'printing github_workspace: $GITHUB_WORKSPACE'
+          echo 'printing PWD: $PWD'
           ./test/smoke-test.sh $APP_NAME
 
