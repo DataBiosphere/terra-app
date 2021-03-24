@@ -23,10 +23,10 @@ function run_test() {
   # Extract command from config file as an array
   local START_CMD=($(jq -r --arg key "$APP_NAME" '.[$key].startcmd' < ci-config.json))
   local MOUNT_FILE=$(jq -r --arg key1 "$APP_NAME" '.[$key1]."mount-file"' < ci-config.json)
-  if [[ -z MOUNT_FILE ]]; then 
+  if [[ ! $MOUNT_FILE == "null" ]]; then 
     START_CMD+=("-a $PWD/$MOUNT_FILE"); 
   fi
-  
+
   log "starting app $APP_NAME with cmd (${START_CMD[@]}) with retries"
   retry 5 ${START_CMD[@]}
 
