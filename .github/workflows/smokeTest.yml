@@ -46,11 +46,12 @@ jobs:
 
       - name: Minikube install and start
         run : |
-         sudo apt-get install virtualbox
          curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
          sudo install minikube-linux-amd64 /usr/bin/minikube
          sudo chmod +x /usr/bin/minikube
-         minikube start --no-vtx-check $(jq -r --arg key1 "$APP_NAME" '.[$key1]."minikube-args"' < ci-config.json) 
+         minikube start --no-vtx-check --driver=none $(jq -r --arg key1 "$APP_NAME" '.[$key1]."minikube-args"' < ci-config.json) 
+
+#sudo apt-get install virtualbox
           
       # we currently use this pre-made action for minikube https://github.com/marketplace/actions/setup-minikube-kubernetes-cluster
       # it supports our use case at the time of writing, but there may come a time when we want to set it up ourselves
