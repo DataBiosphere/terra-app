@@ -44,7 +44,7 @@ jobs:
           sudo install minikube-linux-arm64 /usr/local/bin/minikube
           which minikube
           MINIKUBE_ARGS=$(jq -r --arg key1 "$APP_NAME" '.[$key1]."minikube-args"' < ci-config.json)
-          echo 'Starting minikube with args: $MINIKUBE_ARGS'
+          echo "Starting minikube with args: $MINIKUBE_ARGS"
           minikube start $MINIKUBE_ARGS
 
       # we currently use this pre-made action for minikube https://github.com/marketplace/actions/setup-minikube-kubernetes-cluster
