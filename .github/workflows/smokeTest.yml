@@ -56,6 +56,7 @@ jobs:
          sudo install minikube-linux-amd64 /usr/bin/minikube
          sudo chmod +x /usr/bin/minikube
          minikube start ${{ env.MINIKUBE_ARGS }}
+         minikube mount $GITHUB_WORKSPACE/test:/data
           
       # below is a plugin for minikube if maintaining the above gets arduous https://github.com/marketplace/actions/setup-minikube-kubernetes-cluster
       # it supports our use case at the time of writing, but it is not clear exactly what it is passing to `minikube start`
