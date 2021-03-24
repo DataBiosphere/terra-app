@@ -30,9 +30,11 @@ function run_test() {
   log "starting app $APP_NAME with cmd (${START_CMD[@]}) with retries"
   retry 5 ${START_CMD[@]}
 
+  # Note that retry is doing the 'polling' here and the function essentially returns a boolean
   log "Beginning to poll until pod enters Running status"
   retry 9 is_pod_running
 
+  # Sometimes there is a delay between kubectl reporting the pod running and it being accessible via the ingress, so we retry
   retry 5 verify_app
   log "Smoke tests passed for app $APP_NAME"
 }
@@ -43,7 +45,7 @@ function is_pod_running() {
   if [[ $POD_STATUS == "Running" ]]; then
     log "Successfully polled pod for $APP_NAME until Running status."
   else
-    log "Pod is not in Running status yet, returning exit code 1. Printing pod logs..."
+    log "Pod is not in Running status yet, returning exit code 1."
     return 1
   fi
 }
