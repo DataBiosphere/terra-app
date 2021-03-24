@@ -51,7 +51,8 @@ jobs:
     # minikube start $MINIKUBE_ARGS
       - name: Get Minikube args
         run: |
-          echo ::set-env name=MINIKUBE_ARGS::$(jq -r --arg key1 "$APP_NAME" '.[$key1]."minikube-args"' < ci-config.json)'
+          ARGS=$(jq -r --arg key1 "$APP_NAME" '.[$key1]."minikube-args"' < ci-config.json)
+          echo "MINIKUBE_ARGS=$ARGS" >> $GITHUB_ENV
       # we currently use this pre-made action for minikube https://github.com/marketplace/actions/setup-minikube-kubernetes-cluster
       # it supports our use case at the time of writing, but there may come a time when we want to set it up ourselves
       - name: Setup Minikube
@@ -61,7 +62,7 @@ jobs:
           kubernetes version: 'v1.19.2'
           github token: ${{ secrets.GITHUB_TOKEN }}
           # TODO: how do i use a variable for this? do we need to do this in the shell? 
-          start args: ${{ env.MINIKUBE_ARGS }}
+          start args: "${{ env.MINIKUBE_ARGS }}"
           
       - name: Run smoke test on app 
         run: |
