@@ -1,4 +1,4 @@
-# This is a basic workflow to help you get started with Actions
+# This is workflow designed to test all supported apps in parallel 
 name: App Smoke Test
 # Controls when the action will run. 
 on:
@@ -27,11 +27,11 @@ jobs:
       APP_NAME: ${{ matrix.app }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Checks-out repo under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v2
 
-      # Snap is of questionable stability... consider retrying or installing from a more reliable source if issues occur
+
       - name: Setup data for tests and perform system installs
         run: |
           sudo apt-get install jq
@@ -39,9 +39,6 @@ jobs:
           sudo wget https://github.com/mikefarah/yq/releases/download/v4.6.1/yq_linux_amd64 -O /usr/bin/yq
           sudo chmod +x /usr/bin/yq
           
-        # sudo snap install helm --classic
-        # sudo snap install yq
-
       - name: Get Minikube args
         run: |
           ARGS=$(jq -r --arg key1 "$APP_NAME" '.[$key1]."minikube-args"' < ci-config.json)
