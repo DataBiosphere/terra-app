@@ -81,13 +81,15 @@ services:
 
 Example apps can be found in this repo under [apps](/apps). View the following for more details:
 
+If an app is in this list, it should have a working smoke test run on PRs. See the testing section for details 
+
 [cellxgene](apps/cellxgene)
 
 [cirrocumulus](apps/cirrocumulus)
 
 [jupyter](apps/jupyter)
 
-[rstduio](apps/rstduio)
+[rstudio](apps/rstudio)
 
 [ucsc_genome_browser](apps/ucsc_genome_browser)
 
@@ -98,7 +100,7 @@ This repo contains a `terra-app-local.sh` script which can launch apps on a loca
 Before running the script:
 1. Install `minikube` according to instructions [here](https://minikube.sigs.k8s.io/docs/start/).
 2. Start `minikube` service.
-   a. On Mac (Catalina) I start it with the command:
+   a. On Mac (Catalina) I start it with the command (when NOT connected to a VPN):
      ```
      minikube start --vm=true --mount --mount-string="~/data:/data"
      ```
@@ -132,9 +134,14 @@ Example:
 $ ./terra-app-local.sh install -f /apps/jupyter/app.yaml
 ```
 
+# Testing
+The script detailed in the local launching section, `terra-app-local.sh`, is also used to smoke-test supported apps on merges to this repo. If you are adding an app, and want it to be automatically tested, be sure to add it to the `app` `matrix` in the github action file. 
+
+These smoke-tests DO NOT test against Terra/Leonardo. It may be desirable to have a dedicated test in leonardo pegged to a specific version of an app.yaml. This is not possible until we begin publishing and versioning these app yaml. See https://broadworkbench.atlassian.net/browse/IA-2495.  
+
 # Launching an App on Terra
  
-TODO :)
+Leonardo has an endpoint that takes an app descriptor and various arguments. See the [swagger](https://leonardo.dsde-dev.broadinstitute.org/#/apps/createApp) documentation for the endpoint, and the associated `CreateAppRequest` schema (located near bottom of swagger specification). 
 
 # Helm Chart
 

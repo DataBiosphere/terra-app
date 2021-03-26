@@ -154,6 +154,7 @@ install_app() {
    
     # parse information out of the descriptor
     _appname=$(yq e '.name' "${_filename}")
+    # Do not change this namespace convention without modifying the github action
     _namespace="${_appname}-ns"
     local _ksa="${_appname}-ksa"
     local _baseurl=$(yq e '.services.*.baseUrl' "${_filename}")
@@ -162,7 +163,7 @@ install_app() {
     else
         local _ingresspath="${_baseurl}" 
     fi
-    _hostname="k8s.app.info"
+    _hostname=$(jq -r .hostname < ci-config.json)
     
     if [ -z "${_appname}" ] | [ "${_appname}" == "null" ] ; then
         echo "Error: could not parse app name from file '${_filename}'."
@@ -176,15 +177,20 @@ install_app() {
         kubectl create namespace "${_namespace}"
     fi
 
+    echo "Namespace created."
+
     # create KSA if it doesn't already exist
     if ! kubectl get serviceaccount -n "${_namespace}" | grep -q "${_appname_ksa}"; then
         kubectl create serviceaccount --namespace "${_namespace}" "${_appname_ksa}"
     fi
 
+    echo "Service account created"
+
     # build values yaml from app descriptor 
     # TODO note this supports at most 3 EVs; there is probably a nicer way but 
     # I couldn't figure out how to make yq map over keys.
-    local _tmp_values=$(mktemp)
+    local _tmp_values="$(date +%s)-temp.tmp"
+    touch "${_tmp_values}"
     yq e \
       ".nameOverride=.name \
       | .image.image=.services.*.image \
@@ -227,12 +233,16 @@ install_app() {
     #echo "Installing chart with values:"
     #cat "${_tmp_values}"
     #echo ""
+
+    echo "Preparing for helm install..."
     
     # install the app
     helm upgrade --install -n "${_namespace}" \
       "${_appname}" \
       terra-app-chart/ \
       -f "${_tmp_values}"
+
+    rm "${_tmp_values}"
 }
 
 main() {
