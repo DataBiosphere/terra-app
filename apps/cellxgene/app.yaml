@@ -7,8 +7,9 @@ services:
   cellxgene:
     image: "us.gcr.io/broad-dsp-gcr-public/cellxgene:latest"
     port: 5005
+s
     command:  ["cellxgene"]
     args: ["launch", "--host", "0.0.0.0"]
-    pdMountPath: "/data/fake"
+    pdMountPath: "/data"
     pdAccessMode: "ReadOnlyMany"
     environment: {} 
