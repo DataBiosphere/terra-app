@@ -42,12 +42,12 @@ helm pull terra-app-setup-charts/terra-app-setup --version $VERSION --untar
 If an app is running:
 ```
 VERSION=[Version in Chart.yaml]
-cd leonardo
+cd leonardo # comment
 rm  -rf terra-app-setup # will fail, its ok
 helm pull terra-app-setup-charts/terra-app-setup --version $VERSION 
 mkdir temp
 tar -xf terra-app-setup-$VERSION.tgz -C temp --strip-components=1
-cp temp/* terra-app-setup-charts #will fail, its ok
+cp temp/* terra-app-setup #will fail, its ok
 ```
 
 Now, add the following to `/etc/leonardo.conf` in the leonardo docker image within your fiab
