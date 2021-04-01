@@ -28,12 +28,25 @@ helm repo index terra-app-setup-chart/repo --url https://storage.googleapis.com/
 gsutil cp -r terra-app-setup-chart/repo/terra-app-setup-chart/* gs://terra-app-setup-chart
 ```
 
-Now, to get leo to use your chart, Run this in your fiab, while you are in the leonardo docker image
+Now, to get leo to use your chart, Run this in your fiab, while you are in the leonardo docker image.
+Note that if you already have a running app, the rm will fail because the certs are in use. See subsequent set of commands.
+
+If no apps are running:
 ```
 VERSION=[Version in Chart.yaml]
 cd leonardo
 rm  -rf terra-app-setup
 helm pull terra-app-setup-charts/terra-app-setup --version $VERSION --untar
+```
+If an app is running:
+```
+VERSION=[Version in Chart.yaml]
+cd leonardo
+rm  -rf terra-app-setup # will fail, its ok
+helm pull terra-app-setup-charts/terra-app-setup --version $VERSION 
+mkdir temp
+tar -xf terra-app-setup-$VERSION.tgz -C temp --strip-components=app_1
+cp temp/* terra-app-setup-charts #will fail, its ok
 ```
 
 Now, add the following to `/etc/leonardo.conf` in the leonardo docker image within your fiab
