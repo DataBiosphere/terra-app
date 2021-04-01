@@ -3,7 +3,8 @@
 helm install  --set serviceAccount.annotations.gcpServiceAccount="<value>" -n <namespace> <release-name> ./terra-app-setup-chart
 ```
 # Publish Chart
-For publishing a new version to prod, at project root, run the following commands
+For publishing a new version to prod, at project root, run the following commands.
+Note for these changes to take effect in leonardo you will need to update the version in the Dockerfile and reference.conf 
 
 ```
 helm package terra-app-setup-chart
