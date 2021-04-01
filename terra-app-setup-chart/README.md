@@ -42,7 +42,7 @@ helm pull terra-app-setup-charts/terra-app-setup --version $VERSION --untar
 If an app is running:
 ```
 VERSION=[Version in Chart.yaml]
-cd leonardo # comment
+cd leonardo
 rm  -rf terra-app-setup # will fail, its ok
 helm pull terra-app-setup-charts/terra-app-setup --version $VERSION 
 mkdir temp
