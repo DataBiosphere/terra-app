@@ -46,7 +46,7 @@ cd leonardo
 rm  -rf terra-app-setup # will fail, its ok
 helm pull terra-app-setup-charts/terra-app-setup --version $VERSION 
 mkdir temp
-tar -xf terra-app-setup-$VERSION.tgz -C temp --strip-components=app_1
+tar -xf terra-app-setup-$VERSION.tgz -C temp --strip-components=1
 cp temp/* terra-app-setup-charts #will fail, its ok
 ```
 
