@@ -5,28 +5,30 @@ helm install  --set serviceAccount.annotations.gcpServiceAccount="<value>" -n <n
 # Publish Chart
 For publishing a new version to prod, at project root, run the following commands.
 Note for these changes to take effect in leonardo you will need to update the version in the Dockerfile and reference.conf 
-
+It is very important to re-copy the index.yaml from the remote every time you index the chart
 ```
 helm package terra-app-setup-chart
+rm -rf terra-app-setup-chart/repo
 mkdir terra-app-setup-chart/repo
-gsutil cp -r gs://terra-app-setup-chart terra-app-setup-chart/repo/
-mv terra-app-setup-[Version in Chart.yaml].tgz terra-app-setup-chart/repo/terra-app-setup-chart
-helm repo index terra-app-setup-chart/repo --url https://storage.googleapis.com/terra-app-setup-chart --merge terra-app-setup-chart/repo/terra-app-setup-chart/index.yaml
-gsutil cp -r terra-app-setup-chart/repo/terra-app-setup-chart/* gs://terra-app-setup-chart
+gsutil cp -r gs://terra-app-setup-chart/index.yaml terra-app-setup-chart/repo
+mv terra-app-setup-[Version in Chart.yaml].tgz terra-app-setup-chart/repo
+helm repo index terra-app-setup-chart/repo --url https://storage.googleapis.com/terra-app-setup-chart --merge terra-app-setup-chart/repo/index.yaml
+gsutil cp -r terra-app-setup-chart/repo/* gs://terra-app-setup-chart
 ```
 
 For developing locally
 
 Run this locally to publish your changes (this will not overwrite the version used in prod due to the --merge option).
+It is very important to re-copy the index.yaml from the remote every time you index the chart
 ```
 VERSION=[Version in Chart.yaml]
 helm package terra-app-setup-chart
 rm -rf terra-app-setup-chart/repo
 mkdir -p terra-app-setup-chart/repo
-gsutil cp -r gs://terra-app-setup-chart terra-app-setup-chart/repo
-mv terra-app-setup-$VERSION.tgz terra-app-setup-chart/repo/terra-app-setup-chart
-helm repo index terra-app-setup-chart/repo --url https://storage.googleapis.com/terra-app-dev --merge terra-app-setup-chart/repo/terra-app-setup-chart/index.yaml
-gsutil cp -r terra-app-setup-chart/repo/terra-app-setup-chart/* gs://terra-app-setup-chart
+gsutil cp -r gs://terra-app-setup-chart/index.yaml terra-app-setup-chart/repo
+mv terra-app-setup-$VERSION.tgz terra-app-setup-chart/repo
+helm repo index terra-app-setup-chart/repo --url https://storage.googleapis.com/terra-app-dev --merge terra-app-setup-chart/repo/index.yaml
+gsutil cp -r terra-app-setup-chart/repo/* gs://terra-app-setup-chart
 ```
 
 Now, to get leo to use your chart, Run this in your fiab, while you are in the leonardo docker image.
