@@ -98,7 +98,7 @@ If an app is in this list, it should have a working smoke test run on PRs. See t
 This repo contains a `terra-app-local.sh` script which can launch apps on a locally running [minikube](https://minikube.sigs.k8s.io/docs/) cluster. This can be much more convenient for development than launching apps against Terra.
 
 Before running the script:
-1. Install `minikube` according to instructions [here](https://minikube.sigs.k8s.io/docs/start/).
+1. Install `minikube` and `helm` according to instructions here: [minikube](https://minikube.sigs.k8s.io/docs/start/), [helm](https://helm.sh/docs/intro/install/).
 2. Start `minikube` service.
    a. On Mac (Catalina) I start it with the command (when NOT connected to a VPN):
      ```
