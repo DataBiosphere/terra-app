@@ -25,10 +25,10 @@ Usage:
 
 Available commands:
   install       installs an app
-  uninstall     deletes an app
-  status        displays stats about an app
-  list          lists all apps
-  show-kubectl  prints kubectl commands to interact with an app
+  uninstall     deletes an app (not yet implemented)
+  status        displays stats about an app (not yet implemented)
+  list          lists all apps (not yet implemented)
+  show-kubectl  prints kubectl commands to interact with an app (not yet implemented)
 
 Flags:
   -h, --help    display help
@@ -278,7 +278,7 @@ main() {
     if [ "${_subcmd}" == "install" ]; then
         install "${_subcmd_args[@]}"
     else
-        echo "Unrecognized command '${_subcmd}'."
+        echo "Command '${_subcmd}' was unrecognized or not yet implemented."
         echo "Run '${progname} --help' to see available arguments."
         exit 1
     fi
