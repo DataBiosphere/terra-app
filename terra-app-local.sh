@@ -275,6 +275,8 @@ uninstall() {
     # Apply the standard convention to get the namespace:
     local _namespace="${_appname}-ns"
 
+    # Uninstall the helm chart:
+    helm uninstall -n "${_namespace}" "${_appname}"
     # Delete the namespace from the minikube cluster:
     kubectl delete ns "${_namespace}"
 }
