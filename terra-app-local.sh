@@ -132,7 +132,7 @@ install_nginx() {
     if ! kubectl get ns | grep -q nginx; then
         kubectl create namespace nginx
     fi
-    
+
     # check if we need to add the nginx helm repo
     if ! helm show chart ingress-nginx/ingress-nginx --version=3.23.0 >/dev/null 2>&1; then
         helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx --force-update > /dev/null
@@ -151,7 +151,7 @@ install_app() {
     # read args
     local _filename="$1"
     local _extraargs="$2"
-   
+
     # parse information out of the descriptor
     _appname=$(yq e '.name' "${_filename}")
     # Do not change this namespace convention without modifying the github action
@@ -159,19 +159,19 @@ install_app() {
     local _ksa="${_appname}-ksa"
     local _baseurl=$(yq e '.services.*.baseUrl' "${_filename}")
     if [ -z "${_baseurl}" ] | [ "${_baseurl}" == "null" ]; then
-        local _ingresspath="/${_appname}(/|$)(.*)"       
+        local _ingresspath="/${_appname}(/|$)(.*)"
     else
-        local _ingresspath="${_baseurl}" 
+        local _ingresspath="${_baseurl}"
     fi
     _hostname=$(jq -r .hostname < ci-config.json)
-    
+
     if [ -z "${_appname}" ] | [ "${_appname}" == "null" ] ; then
         echo "Error: could not parse app name from file '${_filename}'."
         exit 1
     fi
 
     echo "Installing '${_appname}' from descriptor file '${_filename}'..."
- 
+
     # create the namespace if it doesn't already exist
     if ! kubectl get ns | grep -q "${_namespace}"; then
         kubectl create namespace "${_namespace}"
@@ -186,8 +186,8 @@ install_app() {
 
     echo "Service account created"
 
-    # build values yaml from app descriptor 
-    # TODO note this supports at most 3 EVs; there is probably a nicer way but 
+    # build values yaml from app descriptor
+    # TODO note this supports at most 3 EVs; there is probably a nicer way but
     # I couldn't figure out how to make yq map over keys.
     local _tmp_values="$(date +%s)-temp.tmp"
     touch "${_tmp_values}"
@@ -221,7 +221,7 @@ install_app() {
     for a in "${_extraargs[@]}"; do
         yq e -i ".image.args += \"$a\"" "${_tmp_values}"
     done
-   
+
     # apply proxy redirect rules if baseUrl is not specified by the app
     if [ -z "${_baseurl}" ] | [ "${_baseurl}" == "null" ]; then
         yq e -i \
@@ -235,7 +235,7 @@ install_app() {
     #echo ""
 
     echo "Preparing for helm install..."
-    
+
     # install the app
     helm upgrade --install -n "${_namespace}" \
       "${_appname}" \
@@ -248,7 +248,7 @@ install_app() {
 main() {
     local _subcmd
     local _subcmd_args
-    
+
     if [ -z "$1" ]; then
         usage
         exit 0
@@ -283,7 +283,7 @@ main() {
         exit 1
     fi
 }
-        
+
 ###
 ### Main
 ###
