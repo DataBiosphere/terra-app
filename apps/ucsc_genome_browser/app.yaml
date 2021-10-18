@@ -2,10 +2,10 @@ name: ucsc-genome-browser
 author: UCSC 
 description: |
   UCSC Genome Browser
-version: 0.0.2
+version: 0.0.3
 services:
   ucsc-gb:
-    image: "dailydreaming/genome_browser:r-0.2"
+    image: "dailydreaming/genome_browser:r-0.3"
     port: 8001
     pdMountPath: "/data"
     pdAccessMode: "ReadWriteOnce"
