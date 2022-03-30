@@ -1,0 +1,9 @@
+name: igv
+author: calbach@verily.com
+description: |
+  IGV webapp
+version: 0.0.1
+services:
+  jupyter:
+    image: "dceoy/igv-webapp"
+    port: 80
