@@ -105,7 +105,7 @@ Before running the script:
 2. Start `minikube` service.
    a. On Mac (Catalina) I start it with the command (when NOT connected to a VPN):
      ```
-     minikube start --vm=true --mount --mount-string="~/data:/data"
+     minikube start --vm=true --driver=docker --mount --mount-string="~/data:/data"
      ```
      Replace the data directory with the directory you want to mount into your persistent volume (or omit if not using persistence).
     
