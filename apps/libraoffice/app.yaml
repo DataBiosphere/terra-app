@@ -5,7 +5,7 @@ description: |
 version: 0.0.1
 services:
   rstudio:
-    image: "lscr.io/linuxserver/libreoffice:latest"
+    image: "linuxserver/libreoffice:latest"
     port: 8001
     # inject a sed command to remove the www-address config used by Leo
     pdMountPath: "/config"
