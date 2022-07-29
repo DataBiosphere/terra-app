@@ -1,7 +1,7 @@
 name: libraoffice
 author: workbench-interactive-analysis@broadinstitute.org
 description: |
-  libra
+  libraoffice
 version: 0.0.1
 services:
   libraOffice:
