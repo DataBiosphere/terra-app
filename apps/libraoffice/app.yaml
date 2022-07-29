@@ -4,7 +4,7 @@ description: |
   libraoffice
 version: 0.0.1
 services:
-  libraOffice:
+  libraoffice:
     image: "linuxserver/libreoffice:latest"
     port: 3000
     pdMountPath: "/data"
