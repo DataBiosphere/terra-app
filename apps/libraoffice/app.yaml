@@ -9,6 +9,3 @@ services:
     port: 3000
     pdMountPath: "/data"
     pdAccessMode: "ReadWriteOnce"
-    environment:
-      PUID: "1000"
-      PGID: "1000"
