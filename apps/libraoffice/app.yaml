@@ -4,10 +4,10 @@ description: |
   libraOffice
 version: 0.0.1
 services:
-  rstudio:
+  libraOffice:
     image: "linuxserver/libreoffice:latest"
     port: 3000
-    pdMountPath: "/config"
+    pdMountPath: "/data"
     pdAccessMode: "ReadWriteOnce"
     environment:
       PUID: "1000"
