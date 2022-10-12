@@ -105,7 +105,7 @@ Before running the script:
 2. Start `minikube` service.
    a. On Mac (Catalina) I start it with the command (when NOT connected to a VPN):
      ```
-     minikube start --vm=true --mount --mount-string="~/data:/data"
+     minikube start --mount --mount-string="/Users/[USERNAME]/data:/data" --kubernetes-version=v1.21.0
      ```
      Replace the data directory with the directory you want to mount into your persistent volume (or omit if not using persistence).
     

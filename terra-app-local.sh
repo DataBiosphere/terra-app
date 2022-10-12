@@ -260,17 +260,17 @@ main() {
                 _subcmd="$1"
                 shift
                 _subcmd_args=("$@")
-                break
-                ;;
+                break;;
+                
             -h | --help)
                 usage
-                exit 0
-                ;;
+                exit 0;;
+                
             *)
                 echo "Unrecognized command '${1}'."
                 echo "Run '${progname} --help' to see available arguments."
-                exit 1
-                ;;
+                exit 1;;
+                
         esac
         shift
     done
