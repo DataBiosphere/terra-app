@@ -134,7 +134,7 @@ Use "terra-app-local.sh [command] --help" for more information about a command.
 
 Example:
 ```
-$ ./terra-app-local.sh install -f /apps/jupyter/app.yaml
+$ ./terra-app-local.sh install -f apps/jupyter/app.yaml
 ```
 
 # Testing

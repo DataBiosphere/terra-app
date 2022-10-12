@@ -120,8 +120,9 @@ install() {
     echo "1. Add an entry to your /etc/hosts:"
     echo "     ${_minikube_ip}  ${_hostname}"
     echo ""
-    echo "2. Load this URL in a browser:"
-    echo "     http://${_hostname}/${_appname}/"
+    echo "2. Run minikube service list to get service namespace and service name"
+    echo ""
+    echo "3. Run minikube service <service_name> -n <namespace>"
     echo ""
 }
 
