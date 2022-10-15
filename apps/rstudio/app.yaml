@@ -18,3 +18,4 @@ services:
       # needed to disable auth
       USER: "rstudio"
       DEFAULT_USER: "rstudio"
+      PASSWORD: "password"
