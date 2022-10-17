@@ -1,3 +1,5 @@
+cloud: gcp
+
 serviceAccount:
   name: "leonardo-app-ksa"
   annotations:
