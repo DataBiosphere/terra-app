@@ -9,7 +9,7 @@ services:
     port: 8001
     # inject a sed command to remove the www-address config used by Leo
     command:  ["/bin/sh", "-c"]
-    args: ["/init"]
+    args: ["/init && tail -f /dev/null"]
     pdMountPath: "/data"
     pdAccessMode: "ReadWriteOnce"
     environment:
