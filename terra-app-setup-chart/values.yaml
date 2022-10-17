@@ -4,4 +4,3 @@ serviceAccount:
   name: "leonardo-app-ksa"
   annotations:
     gcpServiceAccount:
-    azureTenantId:

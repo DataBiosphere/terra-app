@@ -7,15 +7,11 @@ spec:
   podSelector:
     matchLabels:
   ingress:
-  {{- if eq .Values.cloud "gcp" -}}
   - from:
     - podSelector: {}
     - namespaceSelector:
         matchLabels:
           name: nginx
-  {{- else -}}
-  - {}
-  {{- end -}}
   egress:
   - {}
   policyTypes:
