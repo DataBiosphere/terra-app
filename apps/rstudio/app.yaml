@@ -11,7 +11,7 @@ services:
     command:  ["/bin/sh", "-c"]
     args: ["chown -R rstudio:users /home/rstudio && /init"]
     pdMountPath: "/home/rstudio"
-    pdAccessMode: "ReadWriteMany"
+    pdAccessMode: "ReadWriteOnce"
     environment:
       WORKSPACE_NAME: "my-ws"
       WORKSPACE_NAMESPACE: "my-proj"
