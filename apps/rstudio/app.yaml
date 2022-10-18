@@ -9,9 +9,9 @@ services:
     port: 8001
     # inject a sed command to remove the www-address config used by Leo
     command:  ["/bin/sh", "-c"]
-    args: ["/init && tail -f /dev/null"]
-    pdMountPath: "/data"
-    pdAccessMode: "ReadWriteOnce"
+    args: ["/init"]
+    pdMountPath: "/home/rstudio"
+    pdAccessMode: "ReadWriteMany"
     environment:
       WORKSPACE_NAME: "my-ws"
       WORKSPACE_NAMESPACE: "my-proj"
@@ -19,4 +19,4 @@ services:
       USER: "rstudio"
       # USERID: "1002"
       DEFAULT_USER: "rstudio"
-      PASSWORD: "password"
+      PASSWORD: "changeme"
