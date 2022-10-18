@@ -9,7 +9,7 @@ data:
   {{- range $key, $entry := .Values.configs -}}
   {{- if $entry -}}
   {{- $key | nindent 4 }}: |
-    {{- $entry | nindent 8 }}
+    {{- $entry | nindent 8 | quote}}
   {{- end -}}
   {{- end }}
 ---
