@@ -48,7 +48,7 @@ jobs:
          curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
          sudo install minikube-linux-amd64 /usr/bin/minikube
          sudo chmod +x /usr/bin/minikube
-         minikube start --no-vtx-check --driver=none --vm=true
+         minikube start --no-vtx-check --driver=none --vm=true --kubernetes-version=v1.21.0
          sudo mkdir -p /data 
          sudo cp ./test/* /data
           

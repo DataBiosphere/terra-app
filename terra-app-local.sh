@@ -117,11 +117,9 @@ install() {
     echo ""
     echo "Once the pod is RUNNING, do the following to open the app:"
     echo ""
-    echo "1. Add an entry to your /etc/hosts:"
-    echo "     ${_minikube_ip}  ${_hostname}"
+    echo "1. Run minikube service list to get service namespace and service name"
     echo ""
-    echo "2. Load this URL in a browser:"
-    echo "     http://${_hostname}/${_appname}/"
+    echo "2. Run minikube service <service_name> -n <namespace>"
     echo ""
 }
 
@@ -325,13 +323,13 @@ main() {
                 ;;
             -h | --help)
                 usage
-                exit 0
-                ;;
+                exit 0;;
+                
             *)
                 echo "Unrecognized command '${1}'."
                 echo "Run '${progname} --help' to see available arguments."
-                exit 1
-                ;;
+                exit 1;;
+                
         esac
         shift
     done
