@@ -26,9 +26,9 @@ Usage:
 Available commands:
   install       installs an app
   uninstall     deletes an app
-  status        displays stats about an app
-  list          lists all apps
-  show-kubectl  prints kubectl commands to interact with an app
+  status        displays stats about an app (not yet implemented)
+  list          lists all apps (not yet implemented)
+  show-kubectl  prints kubectl commands to interact with an app (not yet implemented)
 
 Flags:
   -h, --help    display help
@@ -245,6 +245,57 @@ install_app() {
     rm "${_tmp_values}"
 }
 
+uninstall() {
+    if [ -z "$1" ]; then
+        uninstall_usage
+        exit 0
+    fi
+
+    while [ "$1" != "" ]; do
+        case "$1" in
+            -f | --filename)
+                shift
+                local _filename=$1
+                ;;
+            -h | --help)
+                uninstall_usage
+                exit 0
+                ;;
+            *)
+                echo "Unrecognized argument '${1}'."
+                echo "Run '${progname} uninstall --help' to see available arguments."
+                exit 1
+                ;;
+        esac
+        shift
+    done
+
+    # Parse app name out of the descriptor:
+    local _appname=$(yq e '.name' "${_filename}")
+    # Apply the standard convention to get the namespace:
+    local _namespace="${_appname}-ns"
+
+    # Uninstall the helm chart:
+    helm uninstall -n "${_namespace}" "${_appname}"
+    # Delete the namespace from the minikube cluster:
+    kubectl delete ns "${_namespace}"
+}
+
+uninstall_usage() {
+    cat <<USAGEEOF
+Uninstall an app from a locally running minikube cluster.
+
+ For more information about configuring minikube, see: https://github.com/DataBiosphere/terra-app
+
+Usage:
+  ${progname} uninstall -f [filename]
+
+Flags:
+  -f, --filename  path to the app descriptor file
+  -h, --help      display this help message
+USAGEEOF
+}
+
 main() {
     local _subcmd
     local _subcmd_args
@@ -256,10 +307,20 @@ main() {
 
     while [ "$1" != "" ]; do
         case "$1" in
-            install | uninstall | status | list | show-kubectl)
-                _subcmd="$1"
+            install)
                 shift
                 _subcmd_args=("$@")
+                install "${_subcmd_args[@]}"
+                break
+                ;;
+            uninstall)
+                shift
+                _subcmd_args=("$@")
+                uninstall "${_subcmd_args[@]}"
+                break
+                ;;
+            status | list | show-kubectl)
+                echo "Command ${1} is not yet implemented. Perhaps you would like to submit a pull request to implement it?"
                 break
                 ;;
             -h | --help)
@@ -274,14 +335,6 @@ main() {
         esac
         shift
     done
-
-    if [ "${_subcmd}" == "install" ]; then
-        install "${_subcmd_args[@]}"
-    else
-        echo "Unrecognized command '${_subcmd}'."
-        echo "Run '${progname} --help' to see available arguments."
-        exit 1
-    fi
 }
 
 ###
