@@ -16,8 +16,8 @@ services:
       WORKSPACE_NAME: "my-ws"
       WORKSPACE_NAMESPACE: "my-proj"
       # needed to disable auth
-      # USER: "rstudio"
+      USER: "rstudio"
       # USERID: "1002"
-      # DEFAULT_USER: "rstudio"
+      DEFAULT_USER: "rstudio"
       PASSWORD: "changeme"
-      DISABLE_AUTH: "true"
+      # DISABLE_AUTH: "true"
