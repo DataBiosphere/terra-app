@@ -20,3 +20,4 @@ services:
       # USERID: "1002"
       DEFAULT_USER: "rstudio"
       PASSWORD: "changeme"
+      DISABLE_AUTH: "true"
