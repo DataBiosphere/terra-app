@@ -7,18 +7,14 @@ services:
   rstudio:
     # image: "bioconductor/bioconductor_docker:RELEASE_3_15"
     image: "us.gcr.io/broad-dsp-gcr-public/anvil-rstudio-bioconductor:3.15.3"
-    port: 8001
+    port: 8787
     # inject a sed command to remove the www-address config used by Leo
     command:  ["/bin/sh", "-c"]
-    args: ["chown -R rstudio:users /home/rstudio && /init"]
+    args: ["chown -R rstudio:rstudio /home/rstudio && /init"]
     pdMountPath: "/home/rstudio"
-    pdAccessMode: "ReadWriteOnce"
+    pdAccessMode: "ReadWriteMany"
     environment:
-      WORKSPACE_NAME: "my-ws"
-      WORKSPACE_NAMESPACE: "my-proj"
-      # needed to disable auth
       USER: "rstudio"
       # USERID: "1002"
-      DEFAULT_USER: "rstudio"
-      PASSWORD: "changeme"
-      # DISABLE_AUTH: "true"
+      PASSWORD: "rstudio"
+      DISABLE_AUTH: "true"
