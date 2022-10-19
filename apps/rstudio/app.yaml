@@ -10,15 +10,15 @@ services:
     port: 8001
     # inject a sed command to remove the www-address config used by Leo
     command:  ["/bin/sh", "-c"]
-    args: ["chown -R rstudio:users /home/rstudio && /init"]
+    args: ["sed -i 's/^www-address.*$//' $RSTUDIO_HOME/rserver.conf && /init"]
     pdMountPath: "/home/rstudio"
     pdAccessMode: "ReadWriteOnce"
     environment:
       WORKSPACE_NAME: "my-ws"
       WORKSPACE_NAMESPACE: "my-proj"
       # needed to disable auth
-      USER: "rstudio"
+      # USER: "rstudio"
       # USERID: "1002"
       DEFAULT_USER: "rstudio"
       PASSWORD: "changeme"
-      # DISABLE_AUTH: "true"
+      DISABLE_AUTH: "true"
