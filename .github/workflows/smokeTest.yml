@@ -35,7 +35,7 @@ jobs:
         run: |
           sudo apt-get install jq
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-          sudo wget https://github.com/mikefarah/yq/releases/download/v4.6.1/yq_linux_amd64 -O /usr/bin/yq
+          sudo wget https://github.com/mikefarah/yq/releases/download/v4.28.1/yq_linux_amd64 -O /usr/bin/yq
           sudo chmod +x /usr/bin/yq
 
       # Note the `--driver=none`. It means that minikube will run on the existing vm ('bare metal') provided by github actions instead of a nested vm
