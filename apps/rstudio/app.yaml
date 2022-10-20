@@ -9,12 +9,11 @@ services:
     # image: "rocker/rstudio:4.2.1"
     image: "us.gcr.io/broad-dsp-gcr-public/anvil-rstudio-bioconductor:3.15.3"
     port: 8787
-    # port: 8001
     # inject a sed command to remove the www-address config used by Leo
     command:  ["/bin/sh", "-c"]
     # args: ["sed -i 's/^www-address.*$//' $RSTUDIO_HOME/rserver.conf && /init"]
     # args: ["echo \"DISABLE_AUTH=true\" >>  /usr/local/lib/R/etc/Renviron.site && /init"]
-    args: ["chown -R rstudio:users /home/rstudio && /init"]
+    args: ["/init"]
     pdMountPath: "/home/rstudio"
     pdAccessMode: "ReadWriteOnce"
     environment:
@@ -22,6 +21,5 @@ services:
       # USER: "rstudio"
       # USERID: "1002"
       # DEFAULT_USER: "rstudio"
-      PASSWORD: "changeme"
       # RSTUDIO_PORT: "8001"
       DISABLE_AUTH: "true"
