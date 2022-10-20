@@ -22,6 +22,6 @@ services:
       # USER: "rstudio"
       # USERID: "1002"
       # DEFAULT_USER: "rstudio"
-      # PASSWORD: "changeme"
+      PASSWORD: "changeme"
       # RSTUDIO_PORT: "8001"
       DISABLE_AUTH: "true"
