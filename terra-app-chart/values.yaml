@@ -14,12 +14,9 @@ configs: {}
   # WORKSPACE_NAME: my-ws
 
 # Provided by Leonardo
-extraEnv: []
+extraEnv:
   # - name: WORKSPACE_NAME
-  #   valueFrom:
-  #    configMapKeyRef:
-  #      name: "{{ include "app.fullname" . }}-configs"
-  #      key: WORKSPACE_NAME
+  #   value: my-workspace
 
 imagePullSecrets: []
 nameOverride: ""
@@ -35,12 +32,13 @@ podSecurityContext: {}
   # fsGroup: 2000
 
 securityContext: {}
+  # runAsNonRoot: true
+  # runAsUser: 999
   # capabilities:
   #   drop:
   #   - ALL
   # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+
 
 service:
   type: ClusterIP

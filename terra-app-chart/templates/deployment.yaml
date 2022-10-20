@@ -49,8 +49,13 @@ spec:
             - {{ . | quote }}
             {{- end }}
           {{- end }}
+          {{- if .Values.extraEnv }}
           env:
-          {{ include "app.podEnvVars" $ }}
+            {{- range .Values.extraEnv }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }} 
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.image.port }}

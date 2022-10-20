@@ -199,19 +199,12 @@ install_app() {
       | .ingress.hosts[0].host=\"${_hostname}\" \
       | .ingress.hosts[0].paths[0]=\"${_ingresspath}\" \
       | .persistence.hostPath=\"/data\" \
-      | .configs=.services.*.environment \
-      | .configs.unset0=\"unset0\" \
-      | .configs.unset1=\"unset1\" \
-      | .configs.unset2=\"unset2\" \
-      | .extraEnv[0].name=(.configs | keys | .[0]) // \"unset0\" \
-      | .extraEnv[0].valueFrom.configMapKeyRef.name=\"${_appname}-configs\" \
-      | .extraEnv[0].valueFrom.configMapKeyRef.key=(.configs | keys | .[0]) // \"unset0\" \
-      | .extraEnv[1].name=(.configs | keys | .[1]) // \"unset1\" \
-      | .extraEnv[1].valueFrom.configMapKeyRef.name=\"${_appname}-configs\" \
-      | .extraEnv[1].valueFrom.configMapKeyRef.key=(.configs | keys | .[1]) // \"unset1\" \
-      | .extraEnv[2].name=(.configs | keys | .[2]) // \"unset2\" \
-      | .extraEnv[2].valueFrom.configMapKeyRef.name=\"${_appname}-configs\" \
-      | .extraEnv[2].valueFrom.configMapKeyRef.key=(.configs | keys | .[2]) // \"unset2\" \
+      | .extraEnv[0].name=(.services.*.environment | to_entries | .[0] | .key ) // \"unset0\"
+      | .extraEnv[0].value=(.services.*.environment | to_entries | .[0] | .value ) // \"unset0\"     
+      | .extraEnv[1].name=(.services.*.environment | to_entries | .[1] | .key ) // \"unset1\" 
+      | .extraEnv[1].value=(.services.*.environment | to_entries | .[1] | .value )  // \"unset1\"    
+      | .extraEnv[2].name=(.services.*.environment | to_entries | .[2] | .key ) // \"unset2\"
+      | .extraEnv[2].value=(.services.*.environment | to_entries | .[2] | .value ) // \"unset2\"
       | del(.name) \
       | del(.services)" "${_filename}" > "${_tmp_values}"
 
