@@ -4,3 +4,15 @@ serviceAccount:
   name: "leonardo-app-ksa"
   annotations:
     gcpServiceAccount:
+
+relaylistener:
+  image: terradevacrpublic.azurecr.io/terra-azure-relay-listeners:5548660
+  port: 8080
+  connectionString: RUNTIME_PARAMETER
+  connectionName: RUNTIME_PARAMETER
+  targetHost: RUNTIME_PARAMETER
+  endpoint: RUNTIME_PARAMETER
+  samResourceId: RUNTIME_PARAMETER
+  samResourceType: "workspace"
+  samUrl: RUNTIME_PARAMETER
+  samAction: "write"
