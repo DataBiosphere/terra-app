@@ -1,0 +1,46 @@
+{{- if eq .Values.cloud "azure" -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "app.fullname" . }}-relaylistener-depl
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "app.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "app.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: relaylistener
+          image: {{ .Values.relaylistener.image }}
+          ports:
+            - containerPort: {{ .Values.relaylistener.port }}
+          env:
+            - name: LISTENER_RELAYCONNECTIONSTRING
+              value: {{ .Values.relaylistener.connectionString }}
+            - name: LISTENER_RELAYCONNECTIONNAME
+              value: {{ .Values.relaylistener.connectionName }}
+            - name: LISTENER_TARGETPROPERTIES_TARGETHOST
+              value: {{ .Values.relaylistener.targetHost }}
+            - name: LISTENER_TARGETPROPERTIES_REMOVEENTITYPATHFROMHTTPURL
+              value: "true"
+            - name: LISTENER_REQUESTINSPECTORS
+              value: "SAM_CHECKER"
+            - name: LISTENER_SAMINSPECTORPROPERTIES_SAMURL
+              value: {{ .Values.relaylistener.samUrl }}
+            - name: LISTENER_SAMINSPECTORPROPERTIES_SAMRESOURCEID
+              value: {{ .Values.relaylistener.samResourceId }}
+            - name: LISTENER_SAMINSPECTORPROPERTIES_SAMRESOURCETYPE
+              value: {{ .Values.relaylistener.samResourceType }}
+            - name: LISTENER_SAMINSPECTORPROPERTIES_SAMACTION
+              value: {{ .Values.relaylistener.samAction }}
+      imagePullSecrets:
+        - name: acr-secret
+{{- end -}}
