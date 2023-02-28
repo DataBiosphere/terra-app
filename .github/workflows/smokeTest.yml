@@ -22,7 +22,7 @@ jobs:
       fail-fast: false
       # add new apps to be smoke tested to the array below
       matrix:
-       app: [jupyter, ucsc-genome-browser, rstudio, cellxgene, cirrocumulus]
+       app: [jupyter, ucsc-genome-browser, rstudio, cellxgene, cirrocumulus, aou-rstudio]
     env:
       APP_NAME: ${{ matrix.app }}
     # Steps represent a sequence of tasks that will be executed as part of the job
