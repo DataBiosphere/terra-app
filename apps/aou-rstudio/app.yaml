@@ -5,7 +5,7 @@ description: |
 version: 0.0.10
 services:
   rstudio:
-    image: "gcr.io/cryptic-skyline-320001/terra-rstudio-aou:smoke-test"
+    image: "gcr.io/cryptic-skyline-320001/terra-rstudio-aou:smoke-test-1"
     port: 8787
     command:  ["/bin/sh", "-c"]
     args: ["chown -R rstudio:users /home/rstudio && /init_aou"]
