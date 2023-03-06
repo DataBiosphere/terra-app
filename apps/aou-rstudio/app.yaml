@@ -14,7 +14,7 @@ services:
     environment:
       # needed to disable auth
       DISABLE_AUTH: "true"
-    securityContext: { }
+    securityContext:
       capabilities:
         add: ["NET_ADMIN"]
 
