@@ -29,7 +29,7 @@ jobs:
     steps:
       # Checks-out repo under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup data for tests and perform system installs
         run: |
