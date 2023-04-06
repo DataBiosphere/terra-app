@@ -1,0 +1,61 @@
+
+# Provided by Leonardo
+configs: {}
+# WORKSPACE_NAME: my-ws
+
+# Provided by Leonardo
+extraEnv:
+# - name: WORKSPACE_NAME
+#   value: my-workspace
+
+imagePullSecrets: []
+
+# Provided by Leonardo
+serviceAccount:
+  name: "test-service-account"
+
+sasLicense: ""
+service:
+  type: ClusterIP
+  port: 80
+
+# TLS and rewrite rules provided by Leonardo
+ingress:
+  enabled: true
+  annotations:
+#   nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
+#   nginx.ingress.kubernetes.io/auth-tls-secret: "{{ $.Release.Namespace }}/ca-secret"
+#   nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+#   nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
+#   nginx.ingress.kubernetes.io/ssl-redirect: "true"
+#   nginx.ingress.kubernetes.io/proxy-redirect-from: "https://k8s-host/"
+#   nginx.ingress.kubernetes.io/proxy-redirect-to: "https://leo-host/"
+   nginx.ingress.kubernetes.io/rewrite-target: "/$2"
+   nginx.ingress.kubernetes.io/proxy-redirect-from: "$scheme://$host/"
+   nginx.ingress.kubernetes.io/proxy-redirect-to: "$scheme://$host/sas/"
+
+# Provided by Leonardo
+nodeSelector: {}
+# cloud.google.com/gke-nodepool: "nodepool-name"
+
+# either GCE PD provided by Leonardo; or hostPath provided by terra-docker-local.sh
+persistence:
+  size: 100G
+  gcePersistentDisk: "gke-disk-test"
+
+welder:
+  extraEnv:
+  - name: GOOGLE_PROJECT
+    value: "terra-vdevel-glaring-bean-1388"
+  - name: STAGING_BUCKET
+    value: "testbucket-sas-yonghao"
+  - name: CLUSTER_NAME
+    value: "all-of-us-123"
+  - name: RUNTIME_NAME
+    value:  "all-of-us-123"
+  - name: OWNER_EMAIL
+    value: "yonnghao@verily.com"
+  - name: WSM_URL
+    value: "dummy"
+  - name: WORKSPACE_ID
+    value: "dummy"

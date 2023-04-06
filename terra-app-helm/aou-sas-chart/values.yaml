@@ -1,0 +1,61 @@
+# Provided by the app descriptor
+image:
+  image: "gcr.io/cryptic-skyline-320001/terra-rstudio-aou:smoke-test-1"
+
+# Provided by Leonardo
+configs: {}
+
+# Provided by Leonardo
+extraEnv:
+# - name: WORKSPACE_NAME
+#   value: my-workspace
+
+imageCredentials:
+  registry: cr.sas.com
+  username:
+  password:
+
+nameOverride: aou-rstudio
+fullnameOverride: aou-rstudio
+
+# Provided by Leonardo
+serviceAccount:
+  name: ""
+
+license: ""
+
+# TLS and rewrite rules provided by Leonardo
+ingress:
+  enabled: true
+  annotations:
+  # nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
+  # nginx.ingress.kubernetes.io/auth-tls-secret: "{{ $.Release.Namespace }}/ca-secret"
+  # nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+  # nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
+  # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  # nginx.ingress.kubernetes.io/proxy-redirect-from: "https://k8s-host/"
+  # nginx.ingress.kubernetes.io/proxy-redirect-to: "https://leo-host/"
+  # nginx.ingress.kubernetes.io/rewrite-target: "/$2"
+  hosts:
+    - host: "k8s.app.info"
+      paths:
+        - "/app(/|$)(.*)"
+  # tls:
+  # - secretName: "tls-secret"
+  #   hosts:
+  #     - "k8s.app.info"
+
+
+# Provided by Leonardo
+nodeSelector: {}
+# cloud.google.com/gke-nodepool: "nodepool-name"
+
+# either GCE PD provided by Leonardo; or hostPath provided by terra-docker-local.sh
+persistence:
+  size: 100G
+  gcePersistentDisk: "gke-sas-disk"
+
+welder:
+  extraEnv:
+  # - name: WORKSPACE_NAME
+  #   value: my-workspace

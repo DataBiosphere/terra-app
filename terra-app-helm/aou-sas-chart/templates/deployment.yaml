@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "app.fullname" . }}
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "app.selectorLabels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+        - name: sasregistry
+      serviceAccountName: "{{- .Values.serviceAccount.name }}"
+      securityContext:
+        fsGroup: 2000
+        fsGroupChangePolicy: "OnRootMismatch"
+      volumes:
+        - name: {{ include "app.fullname" . }}-storage
+          persistentVolumeClaim:
+            claimName: {{ include "app.fullname" . }}-pvc
+      containers:
+        - name: wondershaper
+          image: "us.gcr.io/broad-dsp-gcr-public/wondershaper:0.0.1"
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            capabilities:
+              add:
+              - NET_ADMIN
+          resources: {}
+        - name: aou-sas
+          image: "cr.sas.com/viya-4-x64_oci_linux_2-docker/sas-analytics-pro:0.23.22-20230214.1676371647924"
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 0
+          env:
+            - name: RUN_MODE
+              value: "developer"
+            - name: SAS_DEBUG
+              value: "0"
+            - name: SETINIT_TEXT
+              value: "{{ .Values.sasLicense }}"
+          ports:
+            - name: sas-http
+              containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "/data"
+              name: {{ include "app.fullname" . }}-storage
+          resources: {}
+        - name: welder
+          image: "us.gcr.io/broad-dsp-gcr-public/welder-server:6648f5c"
+          imagePullPolicy: "IfNotPresent"
+          env:
+            - name: CLOUD_PROVIDER
+              value: "gcp"
+            - name: LOCKING_ENABLED
+              value: "false"
+            - name: SHOULD_BACKGROUND_SYNC
+              value: "true"
+            - name: STORAGE_CONTAINER_RESOURCE_ID
+              value: "dummy"
+            - name: STAGING_STORAGE_CONTAINER_RESOURCE_ID
+              value: "dummy"
+            - name: PORT
+              value: "8080"
+            {{- range .Values.welder.extraEnv }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}
+          ports:
+            - name: welder-http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "/work"
+              name: {{ include "app.fullname" . }}-storage
+          resources: {}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
