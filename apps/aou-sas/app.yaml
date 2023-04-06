@@ -1,0 +1,16 @@
+name: rstudio 
+author: workbench-interactive-analysis@broadinstitute.org
+description: |
+  SAS
+version: 0.0.10
+services:
+  rstudio:
+    image: "gcr.io/cryptic-skyline-320001/sas-viya-docker:1"
+    port: 8080
+    pdMountPath: "/home"
+    pdAccessMode: "ReadWriteOnce"
+    environment:
+      # needed to disable auth
+      PRE_DEPLOY_SCRIPT: "groupadd -f -g 1002 sasusers && useradd -m -u 501 -d /home/sasuser1 -g sasusers -s /bin/bash -p '123' sasuser1"
+      SETINIT_TEXT: ""
+      RUN_MODE: "developer"
