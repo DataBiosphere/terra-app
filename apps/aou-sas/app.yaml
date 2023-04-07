@@ -12,5 +12,4 @@ services:
     environment:
       # needed to disable auth
       PRE_DEPLOY_SCRIPT: ""
-      SETINIT_TEXT: ""
       RUN_MODE: "developer"
