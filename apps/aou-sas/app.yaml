@@ -1,11 +1,11 @@
-name: rstudio 
+name: sas
 author: workbench-interactive-analysis@broadinstitute.org
 description: |
   SAS
 version: 0.0.10
 services:
-  rstudio:
-    image: "gcr.io/cryptic-skyline-320001/sas-viya-docker:1"
+  sas:
+    image: "us.gcr.io/cryptic-skyline-320001/sas-viya-docker:1"
     port: 8080
     pdMountPath: "/home"
     pdAccessMode: "ReadWriteOnce"
