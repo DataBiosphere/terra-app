@@ -5,7 +5,7 @@ description: |
 version: 0.0.10
 services:
   sas:
-    image: "us.gcr.io/cryptic-skyline-320001/sas-viya-docker:1"
+    image: "us.gcr.io/broad-dso-gcr-test/terra-sas-aou:0.1.0"
     port: 8080
     pdMountPath: "/home"
     pdAccessMode: "ReadWriteOnce"
