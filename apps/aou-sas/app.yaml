@@ -11,5 +11,4 @@ services:
     pdAccessMode: "ReadWriteOnce"
     environment:
       # needed to disable auth
-      PRE_DEPLOY_SCRIPT: ""
       RUN_MODE: "developer"
