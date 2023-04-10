@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "aou-rstudio-app.fullname" . }}
+  labels:
+    {{- include "aou-rstudio-app.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "aou-rstudio-app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "aou-rstudio-app.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: "{{- .Values.serviceAccount.name }}"
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: { { include "aou-rstudio-app.fullname" . } }-storage
+          persistentVolumeClaim:
+            claimName: { { include "aou-rstudio-app.fullname" . } }-pvc
+      containers:
+        - name: aou-rstudio
+          image: "{{ .Values.image.image }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            {{- range .Values.image.command }}
+            - {{ . | quote }}
+            {{- end }}
+          args:
+            {{- range .Values.image.args }}
+            - {{ . | quote }}
+            {{- end }}
+          env:
+            {{- range .Values.extraEnv }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "{{ .Values.persistence.mountPath -}}"
+              name: { { include "aou-rstudio-app.fullname" . } }-storage
+          livenessProbe:
+            httpGet:
+              path: "{{ .Values.image.baseUrl }}"
+              port: http
+          readinessProbe:
+            httpGet:
+              path: "{{ .Values.image.baseUrl }}"
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        - name: welder
+          image: "us.gcr.io/broad-dsp-gcr-public/welder-server:6648f5c"
+          imagePullPolicy: "IfNotPresent"
+          command: "/opt/docker/bin/entrypoint.sh"
+          env:
+            {{- range .Values.welder.extraEnv }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: \
+              port: http
+          readinessProbe:
+            httpGet:
+              path: \
+              port: http
+          resources:
+            {{- toYaml .Values.welder.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
