@@ -73,6 +73,35 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+        - name: welder
+          image: "us.gcr.io/broad-dsp-gcr-public/welder-server"
+          env:
+            - name: GOOGLE_PROJECT
+              value: "${GOOGLE_PROJECT}"
+            - name: STAGING_BUCKET
+              value: "${STAGING_BUCKET}"
+            - name: CLUSTER_NAME
+              value: "${RUNTIME_NAME}"
+            - name: RUNTIME_NAME
+              value: ${RUNTIME_NAME}"
+            - name: OWNER_EMAIL
+              value: "${OWNER_EMAIL}"
+            - name: IS_RSTUDIO_RUNTIME
+              value: "${IS_RSTUDIO_RUNTIME}"
+            - name: CLOUD_PROVIDER
+              value: "gcp"
+            - name: LOCKING_ENABLED
+              value: "true"
+            - name: PORT
+              value: "8080"
+            - name: WSM_URL
+              value: "dummy"
+            - name: WORKSPACE_ID
+              value: "dummy"
+            - name: STORAGE_CONTAINER_RESOURCE_ID
+              value: "dummy"
+            - name: STAGING_STORAGE_CONTAINER_RESOURCE_ID
+              value: "dummy"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
