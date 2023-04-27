@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "aou-rstudio-app.fullname" . }}
+  name: aou-rstudio
   labels:
-    {{- include "aou-rstudio-app.labels" . | nindent 4 }}
+    {{- include "app.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "aou-rstudio-app.selectorLabels" . | nindent 6 }}
+      {{- include "app.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,7 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "aou-rstudio-app.selectorLabels" . | nindent 8 }}
+        {{- include "app.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -26,11 +26,13 @@ spec:
       {{- end }}
       serviceAccountName: "{{- .Values.serviceAccount.name }}"
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        # TODO: Remove this once we move Wondershaper out from RStudio docker image to sidecar.
+        capabilities:
+          add: [ "NET_ADMIN" ]
       volumes:
-        - name: { { include "aou-rstudio-app.fullname" . } }-storage
+        - name: { { include "app.fullname" . } }-storage
           persistentVolumeClaim:
-            claimName: { { include "aou-rstudio-app.fullname" . } }-pvc
+            claimName: { { include "app.fullname" . } }-pvc
       containers:
         - name: aou-rstudio
           image: "{{ .Values.image.image }}"
@@ -54,7 +56,7 @@ spec:
               protocol: TCP
           volumeMounts:
             - mountPath: "{{ .Values.persistence.mountPath -}}"
-              name: { { include "aou-rstudio-app.fullname" . } }-storage
+              name: { { include "app.fullname" . } }-storage
           livenessProbe:
             httpGet:
               path: "{{ .Values.image.baseUrl }}"
@@ -70,6 +72,32 @@ spec:
           imagePullPolicy: "IfNotPresent"
           command: "/opt/docker/bin/entrypoint.sh"
           env:
+            - name: CLOUD_PROVIDER
+              value: "gcp"
+            - name: LOCKING_ENABLED
+              value: "true"
+            - name: SHOULD_BACKGROUND_SYNC
+              value: "true"
+            - name: WSM_URL
+              value: "dummy"
+            - name: WORKSPACE_ID
+              value: "dummy"
+            - name: STORAGE_CONTAINER_RESOURCE_ID
+              value: "dummy"
+            - name: STAGING_STORAGE_CONTAINER_RESOURCE_ID
+              value: "dummy"
+#            - name: GOOGLE_PROJECT
+#              value: "leo provided"
+#            - name: STAGING_BUCKET
+#              value: "leo provided"
+#            - name: SHOULD_BACKGROUND_SYNC
+#              value: "leo provided"
+#            - name: CLUSTER_NAME
+#              value:"leo provided"
+#            - name: RUNTIME_NAME
+#              value: "leo provided"
+#            - name: OWNER_EMAIL
+#              value: "leo provided"
             {{- range .Values.welder.extraEnv }}
             - name: {{ .name }}
               value: {{ .value | quote }}
@@ -86,6 +114,9 @@ spec:
             httpGet:
               path: \
               port: http
+          volumeMounts:
+            - mountPath: "{{ .Values.persistence.mountPath -}}"
+              name: { { include "app.fullname" . } }-storage
           resources:
             {{- toYaml .Values.welder.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
