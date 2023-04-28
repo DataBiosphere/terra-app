@@ -24,7 +24,7 @@ fullnameOverride: ""
 
 # Provided by Leonardo
 serviceAccount:
-  name: ""
+  name: "test-service-account"
 
 podAnnotations: {}
 
@@ -86,16 +86,26 @@ affinity: {}
 persistence:
   enabled: true
   storageClass: "manual"
-  size: 10G
+  size: 100G
   accessMode: ReadWriteMany
-  # gcePersistentDisk: "gce-pd-name"
+  gcePersistentDisk: "disk--test"
   # hostPath: "/data"
   mountPath: "/home/rstudio"
 
 welder:
   extraEnv:
-  # - name: WORKSPACE_NAME
-  #   value: my-workspace
+  - name: GOOGLE_PROJECT
+    value: "cryptic-skyline-320001"
+  - name: STAGING_BUCKET
+    value: "aou-startup-script"
+  - name: SHOULD_BACKGROUND_SYNC
+    value: true
+  - name: CLUSTER_NAME
+    value: "all-of-us-123"
+  - name: RUNTIME_NAME
+    value:  "all-of-us-123"
+  - name: OWNER_EMAIL
+    value: "yonghaotest1@gmail.com"
   resources: { }
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
