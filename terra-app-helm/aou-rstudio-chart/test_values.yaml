@@ -83,7 +83,6 @@ persistence:
   size: 100G
   accessMode: ReadWriteMany
   gcePersistentDisk: "disk--test"
-  # hostPath: "/data"
   mountPath: "/home/rstudio"
   welderMountPath: "/work"
 
