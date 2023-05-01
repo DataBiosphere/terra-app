@@ -9,10 +9,7 @@ spec:
     storage: {{ .Values.persistence.size }}
   accessModes:
     - ReadWriteMany
-  {{- if .Values.persistence.hostPath }}
-  hostPath:
-    path: {{ .Values.persistence.hostPath }}
-  {{- end }}
+
   claimRef:
     namespace: {{ $.Release.Namespace }}
     name: {{ include "app.fullname" . }}-pvc

@@ -24,18 +24,14 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
-          {{- range .paths }}
-          - path: {{ . }}
-            pathType: ImplementationSpecific
+          - pathType: Prefix
+            path: /rstudio(/|$)(.*)
             backend:
               service:
-                name: {{ $fullName }}
+                name: {{ include "app.fullname" . }}
                 port:
-                  number: {{ $svcPort }}
-          {{- end }}
-    {{- end }}
+                  number: 80
   {{- end }}

@@ -43,11 +43,7 @@ ingress:
 #   nginx.ingress.kubernetes.io/ssl-redirect: "true"
 #   nginx.ingress.kubernetes.io/proxy-redirect-from: "https://k8s-host/"
 #   nginx.ingress.kubernetes.io/proxy-redirect-to: "https://leo-host/"
-#   nginx.ingress.kubernetes.io/rewrite-target: "/$2"
-  hosts:
-    - host: "34.67.114.83.nio.io"
-      paths:
-        - "/rstudio"
+   nginx.ingress.kubernetes.io/rewrite-target: "/$2"
   # tls:
   # - secretName: "tls-secret"
   #   hosts:
@@ -89,6 +85,7 @@ persistence:
   gcePersistentDisk: "disk--test"
   # hostPath: "/data"
   mountPath: "/home/rstudio"
+  welderMountPath: "/work"
 
 welder:
   extraEnv:

@@ -54,7 +54,7 @@ spec:
             {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.image.port }}
+              containerPort: 8787
               protocol: TCP
           volumeMounts:
             - mountPath: "{{ .Values.persistence.mountPath -}}"
@@ -87,8 +87,6 @@ spec:
               value: "dummy"
             - name: STAGING_STORAGE_CONTAINER_RESOURCE_ID
               value: "dummy"
-            - name: WORKING_DIRECTORY
-              value: "{{ .Values.persistence.mountPath -}}"
             - name: PORT
               value: "8080"
 #            - name: GOOGLE_PROJECT
@@ -112,7 +110,7 @@ spec:
               containerPort: 8080
               protocol: TCP
           volumeMounts:
-            - mountPath: "{{ .Values.persistence.mountPath -}}"
+            - mountPath: "{{ .Values.persistence.welderMountPath -}}"
               name: {{ include "app.fullname" . }}-storage
           resources:
             {{- toYaml .Values.welder.resources | nindent 12 }}
