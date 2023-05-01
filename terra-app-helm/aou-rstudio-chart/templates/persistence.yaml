@@ -4,11 +4,11 @@ kind: PersistentVolume
 metadata:
   name: {{ include "app.fullname" . }}-pv
 spec:
-  storageClassName: "{{ .Values.persistence.storageClass }}"
+  storageClassName: "default"
   capacity:
     storage: {{ .Values.persistence.size }}
   accessModes:
-    - {{ .Values.persistence.accessMode }}
+    - ReadWriteMany
   {{- if .Values.persistence.hostPath }}
   hostPath:
     path: {{ .Values.persistence.hostPath }}

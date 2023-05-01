@@ -6,7 +6,7 @@ metadata:
     {{- include "app.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   {{- end }}
   selector:
     matchLabels:
@@ -108,17 +108,9 @@ spec:
               value: {{ .value | quote }}
             {{- end }}
           ports:
-            - name: http
+            - name: welder-http
               containerPort: 8080
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: \
-              port: http
-          readinessProbe:
-            httpGet:
-              path: \
-              port: http
           volumeMounts:
             - mountPath: "{{ .Values.persistence.mountPath -}}"
               name: {{ include "app.fullname" . }}-storage
