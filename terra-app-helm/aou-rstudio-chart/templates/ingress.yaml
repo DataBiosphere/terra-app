@@ -24,14 +24,21 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    - host: rstudio.nio.io
+    - host: {{ .host | quote }}
       http:
         paths:
-          - pathType: Prefix
+          - pathType: ImplementationSpecific
             path: /rstudio(/|$)(.*)
             backend:
               service:
                 name: {{ include "app.fullname" . }}
                 port:
-                  number: 80
+                  number: 8787
+          - pathType: ImplementationSpecific
+            path: /welder(/|$)(.*)
+            backend:
+              service:
+                name: {{ include "app.fullname" . }}-welder
+                port:
+                  number: 8080
   {{- end }}
