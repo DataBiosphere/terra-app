@@ -1,11 +1,6 @@
 # Provided by the app descriptor
 image:
   image: "gcr.io/cryptic-skyline-320001/terra-rstudio-aou:smoke-test-1"
-  port: 8787
-  baseUrl: /
-  args: ["chown -R rstudio:users /home/rstudio && /init_aou"]
-  command: ["/bin/sh", "-c"]
-  pullPolicy: IfNotPresent
 
 # Provided by Leonardo
 configs: {}
@@ -18,15 +13,12 @@ extraEnv:
 
 imagePullSecrets: []
 nameOverride: aou-rstudio
-fullnameOverride: ""
+fullnameOverride: aou-rstudio
 
 # Provided by Leonardo
 serviceAccount:
   name: "test-service-account"
 
-podAnnotations: {}
-
-podSecurityContext: {}
 
 service:
   type: ClusterIP
@@ -46,47 +38,15 @@ ingress:
    nginx.ingress.kubernetes.io/rewrite-target: "/$2"
    nginx.ingress.kubernetes.io/proxy-redirect-from: "$scheme://$host/"
    nginx.ingress.kubernetes.io/proxy-redirect-to: "$scheme://$host/rstudio/"
-  # tls:
-  # - secretName: "tls-secret"
-  #   hosts:
-  #     - "k8s.app.info"
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-#   memory: 128Mi
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
 
 # Provided by Leonardo
 nodeSelector: {}
 # cloud.google.com/gke-nodepool: "nodepool-name"
 
-tolerations: []
-
-affinity: {}
-
 # either GCE PD provided by Leonardo; or hostPath provided by terra-docker-local.sh
 persistence:
-  enabled: true
-  storageClass: "manual"
   size: 100G
-  accessMode: ReadWriteMany
   gcePersistentDisk: "disk--test"
-  mountPath: "/home/rstudio"
-  welderMountPath: "/work"
 
 welder:
   extraEnv:
@@ -100,14 +60,7 @@ welder:
     value:  "all-of-us-123"
   - name: OWNER_EMAIL
     value: "yonghaotest1@gmail.com"
-  resources: { }
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    # limits:
-    #   cpu: 100m
-    #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+  - name: WSM_URL
+    value: "dummy"
+  - name: WORKSPACE_ID
+    value: "dummy"

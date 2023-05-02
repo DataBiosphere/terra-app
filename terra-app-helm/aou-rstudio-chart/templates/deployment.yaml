@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "app.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: 1
-  {{- end }}
   selector:
     matchLabels:
       {{- include "app.selectorLabels" . | nindent 6 }}
@@ -26,7 +24,8 @@ spec:
       {{- end }}
       serviceAccountName: "{{- .Values.serviceAccount.name }}"
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        fsGroup: 2000
+        fsGroupChangePolicy: "OnRootMismatch"
       volumes:
         - name: {{ include "app.fullname" . }}-storage
           persistentVolumeClaim:
@@ -34,19 +33,13 @@ spec:
       containers:
         - name: aou-rstudio
           image: "{{ .Values.image.image }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: IfNotPresent
           securityContext:
             capabilities:
               add:
               - NET_ADMIN
-          command:
-            {{- range .Values.image.command }}
-            - {{ . | quote }}
-            {{- end }}
-          args:
-            {{- range .Values.image.args }}
-            - {{ . | quote }}
-            {{- end }}
+          args: ["chown -R rstudio:users /home/rstudio && /init_aou"]
+          command: ["/bin/sh", "-c"]
           env:
             {{- range .Values.extraEnv }}
             - name: {{ .name }}
@@ -57,7 +50,7 @@ spec:
               containerPort: 8787
               protocol: TCP
           volumeMounts:
-            - mountPath: "{{ .Values.persistence.mountPath -}}"
+            - mountPath: "/home/rstudio"
               name: {{ include "app.fullname" . }}-storage
           livenessProbe:
             httpGet:
@@ -67,8 +60,7 @@ spec:
             httpGet:
               path: "{{ .Values.image.baseUrl }}"
               port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+          resources: {}
         - name: welder
           image: "us.gcr.io/broad-dsp-gcr-public/welder-server:6648f5c"
           imagePullPolicy: "IfNotPresent"
@@ -79,16 +71,16 @@ spec:
               value: "true"
             - name: SHOULD_BACKGROUND_SYNC
               value: "true"
-            - name: WSM_URL
-              value: "dummy"
-            - name: WORKSPACE_ID
-              value: "dummy"
             - name: STORAGE_CONTAINER_RESOURCE_ID
               value: "dummy"
             - name: STAGING_STORAGE_CONTAINER_RESOURCE_ID
               value: "dummy"
             - name: PORT
               value: "8080"
+#            - name: WSM_URL
+#              value: "leo provided"
+#            - name: WORKSPACE_ID
+#              value: "leo provided"
 #            - name: GOOGLE_PROJECT
 #              value: "leo provided"
 #            - name: STAGING_BUCKET
@@ -110,19 +102,10 @@ spec:
               containerPort: 8080
               protocol: TCP
           volumeMounts:
-            - mountPath: "{{ .Values.persistence.welderMountPath -}}"
+            - mountPath: "/work"
               name: {{ include "app.fullname" . }}-storage
-          resources:
-            {{- toYaml .Values.welder.resources | nindent 12 }}
+          resources: {}
       {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

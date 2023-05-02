@@ -1,4 +1,3 @@
-{{- if .Values.persistence.enabled -}}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -9,7 +8,6 @@ spec:
     storage: {{ .Values.persistence.size }}
   accessModes:
     - ReadWriteMany
-
   claimRef:
     namespace: {{ $.Release.Namespace }}
     name: {{ include "app.fullname" . }}-pvc
@@ -24,11 +22,10 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ include "app.fullname" . }}-pvc
 spec:
-  storageClassName: "{{ .Values.persistence.storageClass }}"
+  storageClassName: "default"
   volumeName: {{ include "app.fullname" . }}-pv
   accessModes:
-    - {{ .Values.persistence.accessMode }}
+    - ReadWriteMany
   resources:
     requests:
       storage: {{ .Values.persistence.size }}
-{{- end }}

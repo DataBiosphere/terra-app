@@ -1,15 +1,9 @@
 # Provided by the app descriptor
 image:
   image: "gcr.io/cryptic-skyline-320001/terra-rstudio-aou:smoke-test-1"
-  port: 8787
-  baseUrl: /
-  args: ["chown -R rstudio:users /home/rstudio && /init_aou"]
-  command: ["/bin/sh", "-c"]
-  pullPolicy: IfNotPresent
 
 # Provided by Leonardo
 configs: {}
-# WORKSPACE_NAME: my-ws
 
 # Provided by Leonardo
 extraEnv:
@@ -23,10 +17,6 @@ fullnameOverride: aou-rstudio
 # Provided by Leonardo
 serviceAccount:
   name: ""
-
-podAnnotations: {}
-
-podSecurityContext: {}
 
 # TLS and rewrite rules provided by Leonardo
 ingress:
@@ -49,54 +39,17 @@ ingress:
   #   hosts:
   #     - "k8s.app.info"
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-#   memory: 128Mi
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
 
 # Provided by Leonardo
 nodeSelector: {}
 # cloud.google.com/gke-nodepool: "nodepool-name"
 
-tolerations: []
-
-affinity: {}
-
 # either GCE PD provided by Leonardo; or hostPath provided by terra-docker-local.sh
 persistence:
-  enabled: true
-  storageClass: "manual"
-  size: 10G
-  accessMode: ReadWriteMany
-  # gcePersistentDisk: "gce-pd-name"
-  mountPath: "/home/rstudio"
+  size: 100G
+  gcePersistentDisk: "disk--test"
 
 welder:
   extraEnv:
   # - name: WORKSPACE_NAME
   #   value: my-workspace
-  resources: { }
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    # limits:
-    #   cpu: 100m
-    #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
