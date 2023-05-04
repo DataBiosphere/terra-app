@@ -61,6 +61,22 @@ spec:
               path: "{{ .Values.image.baseUrl }}"
               port: http
           resources: {}
+        - name: aou-libraoffice
+          image: "lscr.io/linuxserver/libreoffice:7.2.2.2-r2-ls44"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: TITLE
+              value: "AoU Testing tool"
+            - name: START_DOCKER
+              value: "false"
+          ports:
+            - name: libra-http
+              containerPort: 3000
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "/data"
+              name: {{ include "app.fullname" . }}-storage
+          resources: {}
         - name: welder
           image: "us.gcr.io/broad-dsp-gcr-public/welder-server:6648f5c"
           imagePullPolicy: "IfNotPresent"
