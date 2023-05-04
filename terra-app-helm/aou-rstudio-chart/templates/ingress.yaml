@@ -41,4 +41,11 @@ spec:
                 name: {{ include "app.fullname" . }}-welder
                 port:
                   number: 8080
+          - pathType: ImplementationSpecific
+            path: /libraoffice(/|$)(.*)
+            backend:
+              service:
+                name: {{ include "app.fullname" . }}-libraoffice
+                port:
+                  number: 3000
   {{- end }}
