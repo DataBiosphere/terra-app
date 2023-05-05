@@ -84,7 +84,7 @@ spec:
             - name: CLOUD_PROVIDER
               value: "gcp"
             - name: LOCKING_ENABLED
-              value: "true"
+              value: "false"
             - name: SHOULD_BACKGROUND_SYNC
               value: "true"
             - name: STORAGE_CONTAINER_RESOURCE_ID
