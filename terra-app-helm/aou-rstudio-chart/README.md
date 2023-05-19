@@ -1,5 +1,5 @@
 # Publishing `terra-app-helm` Helm Chart
-At project root, run the following commands:
+At project root, run the following commands (example with aou-rstudio-chart):
 ```
 cd terra-app-helm
 helm package aou-rstudio-chart
