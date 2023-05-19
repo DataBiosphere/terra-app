@@ -77,10 +77,10 @@ spec:
               value: "dummy"
             - name: PORT
               value: "8080"
-#            - name: WSM_URL
-#              value: "leo provided"
-#            - name: WORKSPACE_ID
-#              value: "leo provided"
+            - name: WSM_URL
+              value: "dummy"
+            - name: WORKSPACE_ID
+              value: "dummy"
 #            - name: GOOGLE_PROJECT
 #              value: "leo provided"
 #            - name: STAGING_BUCKET
