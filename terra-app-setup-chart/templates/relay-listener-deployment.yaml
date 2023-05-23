@@ -37,7 +37,7 @@ spec:
             - name: LISTENER_TARGETPROPERTIES_TARGETHOST
               value: {{ .Values.relaylistener.targetHost }}
             - name: LISTENER_TARGETPROPERTIES_REMOVEENTITYPATHFROMHTTPURL
-              value: "true"
+              value: {{ .Values.relaylistener.removeEntityPathFromHttpUrl }}
             - name: LISTENER_REQUESTINSPECTORS
               value: "SAM_CHECKER"
             - name: LISTENER_SAMINSPECTORPROPERTIES_SAMURL
@@ -48,6 +48,12 @@ spec:
               value: {{ .Values.relaylistener.samResourceType }}
             - name: LISTENER_SAMINSPECTORPROPERTIES_SAMACTION
               value: {{ .Values.relaylistener.samAction }}
+            - name: LISTENER_SETDATEACCESSEDINSPECTORPROPERTIES_SERVICEHOST
+              value: {{ .Values.relaylistener.leoUrl }}
+            - name: LISTENER_SETDATEACCESSEDINSPECTORPROPERTIES_WORKSPACEID
+              value: {{ .Values.relaylistener.workspaceId }}
+            - name: LISTENER_SETDATEACCESSEDINSPECTORPROPERTIES_RUNTIMENAME
+              value: {{ .Values.relaylistener.runtimeName }}
       imagePullSecrets:
         - name: acr-secret
 {{- end -}}
