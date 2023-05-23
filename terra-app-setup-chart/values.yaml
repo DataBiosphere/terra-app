@@ -6,7 +6,7 @@ serviceAccount:
     gcpServiceAccount:
 
 relaylistener:
-  image: terradevacrpublic.azurecr.io/terra-azure-relay-listeners:3a932af
+  image: terradevacrpublic.azurecr.io/terra-azure-relay-listeners:decc8b0
   port: 8080
   connectionString: RUNTIME_PARAMETER
   connectionName: RUNTIME_PARAMETER
@@ -16,3 +16,7 @@ relaylistener:
   samResourceType: "workspace"
   samUrl: RUNTIME_PARAMETER
   samAction: "write"
+  removeEntityPathFromHttpUrl: "true"
+  leoUrl: "https://leonardo.dsde-dev.broadinstitute.org"
+  workspaceId: RUNTIME_PARAMETER
+  runtimeName: RUNTIME_PARAMETER
