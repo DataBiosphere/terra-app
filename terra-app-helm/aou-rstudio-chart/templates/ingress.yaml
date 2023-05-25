@@ -1,6 +1,5 @@
 {{- if .Values.ingress.enabled -}}
   {{- $fullName := include "app.fullname" . -}}
-  {{- $svcPort := .Values.service.port -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -24,21 +23,18 @@ spec:
     {{- end }}
   {{- end }}
   rules:
+    {{- range .Values.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
-          - pathType: ImplementationSpecific
-            path: /rstudio(/|$)(.*)
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ include "app.fullname" . }}
+                name: {{ .backend.service.name }}
                 port:
-                  number: 8787
-          - pathType: ImplementationSpecific
-            path: /welder(/|$)(.*)
-            backend:
-              service:
-                name: {{ include "app.fullname" . }}-welder
-                port:
-                  number: 8080
+                  number: {{ .backend.service.port.number }}
+          {{- end }}
+    {{- end }}
   {{- end }}

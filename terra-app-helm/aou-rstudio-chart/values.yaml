@@ -1,14 +1,6 @@
 # Provided by the app descriptor
 image:
-  image: "gcr.io/cryptic-skyline-320001/terra-rstudio-aou:smoke-test-1"
-
-# Provided by Leonardo
-configs: {}
-
-# Provided by Leonardo
-extraEnv:
-# - name: WORKSPACE_NAME
-#   value: my-workspace
+  image: "us.gcr.io/broad-dsp-gcr-public/terra-rstudio-aou:0.1.1"
 
 imagePullSecrets: []
 nameOverride: aou-rstudio
@@ -16,40 +8,57 @@ fullnameOverride: aou-rstudio
 
 # Provided by Leonardo
 serviceAccount:
-  name: ""
+  # name: "dummy"
+
+service:
+  type: ClusterIP
+  port: 80
 
 # TLS and rewrite rules provided by Leonardo
 ingress:
-  enabled: true
-  annotations:
-  # nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
-  # nginx.ingress.kubernetes.io/auth-tls-secret: "{{ $.Release.Namespace }}/ca-secret"
-  # nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
-  # nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
-  # nginx.ingress.kubernetes.io/ssl-redirect: "true"
-  # nginx.ingress.kubernetes.io/proxy-redirect-from: "https://k8s-host/"
-  # nginx.ingress.kubernetes.io/proxy-redirect-to: "https://leo-host/"
-  # nginx.ingress.kubernetes.io/rewrite-target: "/$2"
-  hosts:
-    - host: "k8s.app.info"
-      paths:
-        - "/app(/|$)(.*)"
+  # enabled: true
+  # annotations:
+  #   nginx.ingress.kubernetes.io/auth-tls-secret: "{{ $.Release.Namespace }}/ca-secret"
+  #   nginx.ingress.kubernetes.io/proxy-redirect-from: "https://k8s-host/"
+  #   nginx.ingress.kubernetes.io/proxy-redirect-to: "https://leo-host/"
+  #   nginx.ingress.kubernetes.io/rewrite-target: "/$2"
+  # hosts:
+  #   - host: "k8s.app.info"
+  #     paths:
+  #     - path: "/app(/|$)(.*)"
+  #       backend:
+  #         service:
+  #           name: "aou-rstudio"
+  #             port:
+  #               number: 8787
+  #     - path: "/welder(/|$)(.*)"
+  #       backend:
+  #         service:
+  #           name: "aou-rstudio-welder"
+  #             port:
+  #               number: 8080
   # tls:
-  # - secretName: "tls-secret"
-  #   hosts:
-  #     - "k8s.app.info"
-
+  #   - secretName: "tls-secret"
+  #     hosts:
+  #       - "k8s.app.info"
 
 # Provided by Leonardo
-nodeSelector: {}
-# cloud.google.com/gke-nodepool: "nodepool-name"
+nodeSelector:
+  # cloud.google.com/gke-nodepool: "nodepool-name"
 
-# either GCE PD provided by Leonardo; or hostPath provided by terra-docker-local.sh
+# GCE PD provided by Leonardo
 persistence:
-  size: 100G
-  gcePersistentDisk: "disk--test"
+  # size: 100G
+  # gcePersistentDisk: "disk--test"
 
+# Welder env variables provided by Leonardo
 welder:
   extraEnv:
-  # - name: WORKSPACE_NAME
-  #   value: my-workspace
+  # - name: GOOGLE_PROJECT
+  #   value: "dummy"
+  # - name: STAGING_BUCKET
+  #   value: "dummy"
+  # - name: CLUSTER_NAME
+  #   value: "dummy"
+  # - name: OWNER_EMAIL
+  #   value: "dummy"

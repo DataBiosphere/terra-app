@@ -40,11 +40,6 @@ spec:
               - NET_ADMIN
           args: ["chown -R rstudio:users /home/rstudio && /init_aou"]
           command: ["/bin/sh", "-c"]
-          env:
-            {{- range .Values.extraEnv }}
-            - name: {{ .name }}
-              value: {{ .value | quote }}
-            {{- end }}
           ports:
             - name: http
               containerPort: 8787
@@ -81,18 +76,6 @@ spec:
               value: "dummy"
             - name: WORKSPACE_ID
               value: "dummy"
-#            - name: GOOGLE_PROJECT
-#              value: "leo provided"
-#            - name: STAGING_BUCKET
-#              value: "leo provided"
-#            - name: SHOULD_BACKGROUND_SYNC
-#              value: "leo provided"
-#            - name: CLUSTER_NAME
-#              value:"leo provided"
-#            - name: RUNTIME_NAME
-#              value: "leo provided"
-#            - name: OWNER_EMAIL
-#              value: "leo provided"
             {{- range .Values.welder.extraEnv }}
             - name: {{ .name }}
               value: {{ .value | quote }}
