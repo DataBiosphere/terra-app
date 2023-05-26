@@ -23,18 +23,22 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
-      http:
-        paths:
-          {{- range .paths }}
-          - path: {{ .path }}
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: {{ .backend.service.name }}
-                port:
-                  number: {{ .backend.service.port.number }}
-          {{- end }}
-    {{- end }}
-  {{- end }}
+  - host: {{ .Values.ingress.host }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: {{ include "app.fullname" . }}
+            port:
+              number: 8787
+        path: {{ .Values.ingress.rstudio.path }}
+        pathType: ImplementationSpecific
+      - backend:
+          service:
+            name: {{ include "app.fullname" . }}-welder
+            port:
+              number: 8080
+        path: {{ .Values.ingress.welder.path }}
+        pathType: ImplementationSpecific
+{{- end }}
+  
