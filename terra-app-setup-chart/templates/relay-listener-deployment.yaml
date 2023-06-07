@@ -54,6 +54,8 @@ spec:
               value: {{ .Values.relaylistener.workspaceId }}
             - name: LISTENER_SETDATEACCESSEDINSPECTORPROPERTIES_RUNTIMENAME
               value: {{ .Values.relaylistener.runtimeName }}
+            - name: LISTENER_CORSSUPPORTPROPERTIES_VALIDHOSTS
+              value: {{ .Values.relaylistener.validHosts }}
       imagePullSecrets:
         - name: acr-secret
 {{- end -}}
