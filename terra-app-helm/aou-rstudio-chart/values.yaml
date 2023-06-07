@@ -1,0 +1,52 @@
+# Provided by the app descriptor
+image:
+  image: "us.gcr.io/broad-dsp-gcr-public/terra-rstudio-aou:0.1.1"
+
+imagePullSecrets: []
+nameOverride: aou-rstudio
+fullnameOverride: aou-rstudio
+
+# Provided by Leonardo
+serviceAccount:
+  # name: "dummy"
+
+service:
+  type: ClusterIP
+  port: 80
+
+# TLS and rewrite rules provided by Leonardo
+ingress:
+  # enabled: true
+  # annotations:
+  #   nginx.ingress.kubernetes.io/auth-tls-secret: "{{ $.Release.Namespace }}/ca-secret"
+  #   nginx.ingress.kubernetes.io/proxy-redirect-from: "https://k8s-host/"
+  #   nginx.ingress.kubernetes.io/proxy-redirect-to: "https://leo-host/"
+  #   nginx.ingress.kubernetes.io/rewrite-target: "/$2"
+  #   host: "1455694897.jupyter.firecloud.org"
+  #   rstudio.path: "/proxy/google/v1/apps/dsp-leo-test1/app1/rstudio-service(/|$)(.*)"
+  #   welder.path: "/proxy/google/v1/apps/dsp-leo-test1/app1/welder-service(/|$)(.*)"
+  # tls:
+  #   - secretName: "tls-secret"
+  #     hosts:
+  #       - "k8s.app.info"
+
+# Provided by Leonardo
+nodeSelector:
+  # cloud.google.com/gke-nodepool: "nodepool-name"
+
+# GCE PD provided by Leonardo
+persistence:
+  # size: 100G
+  # gcePersistentDisk: "disk--test"
+
+# Welder env variables provided by Leonardo
+welder:
+  extraEnv:
+  # - name: GOOGLE_PROJECT
+  #   value: "dummy"
+  # - name: STAGING_BUCKET
+  #   value: "dummy"
+  # - name: CLUSTER_NAME
+  #   value: "dummy"
+  # - name: OWNER_EMAIL
+  #   value: "dummy"

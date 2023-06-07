@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "app.fullname" . }}
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "app.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: "{{- .Values.serviceAccount.name }}"
+      securityContext:
+        fsGroup: 2000
+        fsGroupChangePolicy: "OnRootMismatch"
+      volumes:
+        - name: {{ include "app.fullname" . }}-storage
+          persistentVolumeClaim:
+            claimName: {{ include "app.fullname" . }}-pvc
+      containers:
+        - name: aou-rstudio
+          image: "{{ .Values.image.image }}"
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            capabilities:
+              add:
+              - NET_ADMIN
+          args: ["chown -R rstudio:users /home/rstudio && /init_aou"]
+          command: ["/bin/sh", "-c"]
+          ports:
+            - name: http
+              containerPort: 8787
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "/home/rstudio"
+              name: {{ include "app.fullname" . }}-storage
+          livenessProbe:
+            httpGet:
+              path: "{{ .Values.image.baseUrl }}"
+              port: http
+          readinessProbe:
+            httpGet:
+              path: "{{ .Values.image.baseUrl }}"
+              port: http
+          resources: {}
+        - name: welder
+          image: "us.gcr.io/broad-dsp-gcr-public/welder-server:6648f5c"
+          imagePullPolicy: "IfNotPresent"
+          env:
+            - name: CLOUD_PROVIDER
+              value: "gcp"
+            - name: LOCKING_ENABLED
+              value: "true"
+            - name: SHOULD_BACKGROUND_SYNC
+              value: "true"
+            - name: STORAGE_CONTAINER_RESOURCE_ID
+              value: "dummy"
+            - name: STAGING_STORAGE_CONTAINER_RESOURCE_ID
+              value: "dummy"
+            - name: PORT
+              value: "8080"
+            - name: WSM_URL
+              value: "dummy"
+            - name: WORKSPACE_ID
+              value: "dummy"
+            {{- range .Values.welder.extraEnv }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}
+          ports:
+            - name: welder-http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "/work"
+              name: {{ include "app.fullname" . }}-storage
+          resources: {}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

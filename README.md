@@ -148,15 +148,17 @@ Leonardo has an endpoint that takes an app descriptor and various arguments. See
 
 # Helm Chart
 
-There are two helm charts inside this repo:
+There are three helm charts inside this repo:
 
 1. [terra-app-setup-chart](terra-app-setup-chart): this chart sets up common infrastructure used by Galaxy and Terra custom apps.
 2. [terra-app-chart](terra-app-chart): this chart deploys Terra custom apps.
+3. [terra-app-helm/aou-rstudio-chart](terra-app-helm/aou-rstudio-chart): this chart deploys the fully customizable RStudio app from scratch and do not follow the custom app model
 
 The charts are deployed to the following repos:
 ```
 helm repo add terra-app https://terra-app-charts.storage.googleapis.com
 helm repo add terra-app-setup https://terra-app-setup-chart.storage.googleapis.com
+helm repo add aou-rstudio-chart https://storage.googleapis.com/terra-app-helm/aou-rstudio-chart
 helm repo update
 ```
 ```
@@ -173,4 +175,11 @@ description: Chart for set up entities for deploying Terra applications
 name: terra-app-setup
 type: application
 version: 0.0.1
+
+$ helm show chart aou-rstudio-chart/aou-rstudio-chart
+apiVersion: v2
+description: Chart for deploying Rstudio to All of Us Workbench
+name: aou-rstudio-chart
+type: application
+version: 0.1.0
 ```
