@@ -57,3 +57,4 @@ spec:
       imagePullSecrets:
         - name: acr-secret
 {{- end -}}
+
