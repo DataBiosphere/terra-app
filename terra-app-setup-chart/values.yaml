@@ -20,3 +20,8 @@ relaylistener:
   leoUrl: "https://leonardo.dsde-dev.broadinstitute.org"
   workspaceId: RUNTIME_PARAMETER
   runtimeName: RUNTIME_PARAMETER
+  validHosts:
+    - RUNTIME_PARAMETER
+    - RUNTIME_PARAMETER
+    - RUNTIME_PARAMETER
+    - RUNTIME_PARAMETER
