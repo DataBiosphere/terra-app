@@ -16,6 +16,7 @@ spec:
     metadata:
       labels:
         {{- include "app.selectorLabels" . | nindent 8 }}
+        leoServiceName: relay-listener
     spec:
       containers:
         - name: relaylistener

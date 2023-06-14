@@ -48,4 +48,6 @@ Selector labels
 {{- define "app.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "app.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+leoAppName: {{ .Values.relaylistener.runtimeName }}
+workspaceId: {{ .Values.relaylistener.workspaceId }}
 {{- end }}
