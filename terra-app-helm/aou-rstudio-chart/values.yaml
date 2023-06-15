@@ -3,8 +3,6 @@ image:
   image: "us.gcr.io/broad-dsp-gcr-public/terra-rstudio-aou:0.1.1"
 
 imagePullSecrets: []
-nameOverride: aou-rstudio
-fullnameOverride: aou-rstudio
 
 # Provided by Leonardo
 serviceAccount:
