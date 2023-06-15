@@ -37,7 +37,11 @@ persistence:
   # size: 100G
   # gcePersistentDisk: "disk--test"
 
-# Welder env variables provided by Leonardo
+# Provided by Leonardo
+extraEnv:
+  # - name: WORKSPACE_NAME
+  #   value: my-workspace
+
 welder:
   extraEnv:
   # - name: GOOGLE_PROJECT
