@@ -40,6 +40,13 @@ spec:
               - NET_ADMIN
           args: ["chown -R rstudio:users /home/rstudio && /init_aou"]
           command: ["/bin/sh", "-c"]
+          {{- if .Values.extraEnv }}
+          env:
+            {{- range .Values.extraEnv }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 8787
