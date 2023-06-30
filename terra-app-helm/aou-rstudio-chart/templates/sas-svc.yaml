@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "app.fullname" . }}-libraoffice
+  name: {{ include "app.fullname" . }}-sas
   labels:
     {{- include "app.labels" . | nindent 4 }}
 spec:
   type: ClusterIP
   ports:
-    - port: 3000
-      targetPort: libra-http
+    - port: 8001
+      targetPort: sas-http
       protocol: TCP
-      name: libra-http
+      name: sas-http
   selector:
     {{- include "app.selectorLabels" . | nindent 4 }}

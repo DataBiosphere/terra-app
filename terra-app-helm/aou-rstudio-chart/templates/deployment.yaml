@@ -47,10 +47,10 @@ spec:
             {{- end }}
           ports:
             - name: http
-              containerPort: 8787
+              containerPort: 8081
               protocol: TCP
           volumeMounts:
-            - mountPath: "/home/rstudio"
+            - mountPath: "/data"
               name: {{ include "app.fullname" . }}-storage
           livenessProbe:
             httpGet:
@@ -61,17 +61,19 @@ spec:
               path: "{{ .Values.image.baseUrl }}"
               port: http
           resources: {}
-        - name: aou-libraoffice
-          image: "lscr.io/linuxserver/libreoffice:7.2.2.2-r2-ls44"
+        - name: aou-sas
+          image: "us.gcr.io/terra-vdevel-glaring-bean-1388/sas-viya:latest"
           imagePullPolicy: IfNotPresent
           env:
-            - name: TITLE
-              value: "AoU Testing tool"
-            - name: START_DOCKER
-              value: "false"
+            - name: RUN_MODE
+              value: "developer"
+            - name: SAS_DEBUG
+              value: "0"
+            - name: SETINIT_TEXT
+              value: "{{ .Values.sasLicense }}"
           ports:
-            - name: libra-http
-              containerPort: 3000
+            - name: sas-http
+              containerPort: 8081
               protocol: TCP
           volumeMounts:
             - mountPath: "/data"
@@ -93,22 +95,6 @@ spec:
               value: "dummy"
             - name: PORT
               value: "8080"
-#            - name: WSM_URL
-#              value: "leo provided"
-#            - name: WORKSPACE_ID
-#              value: "leo provided"
-#            - name: GOOGLE_PROJECT
-#              value: "leo provided"
-#            - name: STAGING_BUCKET
-#              value: "leo provided"
-#            - name: SHOULD_BACKGROUND_SYNC
-#              value: "leo provided"
-#            - name: CLUSTER_NAME
-#              value:"leo provided"
-#            - name: RUNTIME_NAME
-#              value: "leo provided"
-#            - name: OWNER_EMAIL
-#              value: "leo provided"
             {{- range .Values.welder.extraEnv }}
             - name: {{ .name }}
               value: {{ .value | quote }}

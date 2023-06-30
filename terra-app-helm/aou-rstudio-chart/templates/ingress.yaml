@@ -28,13 +28,6 @@ spec:
       http:
         paths:
           - pathType: ImplementationSpecific
-            path: /rstudio(/|$)(.*)
-            backend:
-              service:
-                name: {{ include "app.fullname" . }}
-                port:
-                  number: 8787
-          - pathType: ImplementationSpecific
             path: /welder(/|$)(.*)
             backend:
               service:
@@ -42,10 +35,10 @@ spec:
                 port:
                   number: 8080
           - pathType: ImplementationSpecific
-            path: /libraoffice(/|$)(.*)
+            path: /sas(/|$)(.*)
             backend:
               service:
-                name: {{ include "app.fullname" . }}-libraoffice
+                name: {{ include "app.fullname" . }}-sas
                 port:
-                  number: 3000
+                  number: 8001
   {{- end }}

@@ -12,13 +12,12 @@ extraEnv:
 #   value: my-workspace
 
 imagePullSecrets: []
-nameOverride: aou-rstudio
-fullnameOverride: aou-rstudio
 
 # Provided by Leonardo
 serviceAccount:
   name: "test-service-account"
 
+sasLicense: "fill me""
 
 service:
   type: ClusterIP
@@ -51,15 +50,15 @@ persistence:
 welder:
   extraEnv:
   - name: GOOGLE_PROJECT
-    value: "cryptic-skyline-320001"
+    value: "terra-vdevel-glaring-bean-1388"
   - name: STAGING_BUCKET
-    value: "aou-startup-script"
+    value: "testbucket-sas-yonghao"
   - name: CLUSTER_NAME
     value: "all-of-us-123"
   - name: RUNTIME_NAME
     value:  "all-of-us-123"
   - name: OWNER_EMAIL
-    value: "yonghaotest1@gmail.com"
+    value: "yonnghao@verily.com"
   - name: WSM_URL
     value: "dummy"
   - name: WORKSPACE_ID

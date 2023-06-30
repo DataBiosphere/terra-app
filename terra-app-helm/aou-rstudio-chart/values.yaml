@@ -18,6 +18,8 @@ fullnameOverride: aou-rstudio
 serviceAccount:
   name: ""
 
+license: ""
+
 # TLS and rewrite rules provided by Leonardo
 ingress:
   enabled: true
@@ -47,7 +49,7 @@ nodeSelector: {}
 # either GCE PD provided by Leonardo; or hostPath provided by terra-docker-local.sh
 persistence:
   size: 100G
-  gcePersistentDisk: "disk--test"
+  gcePersistentDisk: "gke-sas-disk"
 
 welder:
   extraEnv:
