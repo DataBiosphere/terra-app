@@ -38,17 +38,28 @@ spec:
               - NET_ADMIN
           resources: {}
         - name: aou-sas
-          image: "cr.sas.com/viya-4-x64_oci_linux_2-docker/sas-analytics-pro:0.23.22-20230214.1676371647924"
+          image: "cr.sas.com/viya-4-x64_oci_linux_2-docker/sas-analytics-pro:0.27.22-20230613.1686650274071"
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0
+            runAsGroup: 0
           env:
             - name: RUN_MODE
               value: "developer"
+            - name: HOST_AUTH
+              value: ""
             - name: SAS_DEBUG
               value: "0"
             - name: SETINIT_TEXT
               value: "{{ .Values.sasLicense }}"
+            - name: JAVA_OPTION_SAS_COMMONS_WEB_SECURITY_CORS_ALLOWEDORIGINS
+              value: "-Dsas.commons.web.security.cors.allowedOrigins=*"
+            - name: JAVA_OPTION_SAS_COMMONS_WEB_SECURITY_CORS_ALLOWCREDENTIALS
+              value: "-Dsas.commons.web.security.cors.allowCredentials=false"
+            - name: JAVA_OPTION_SAS_COMMONS_WEB_SECURITY_CORS_ALLOWEDHEADERS
+              value: "-Dsas.commons.web.security.cors.allowedHeaders=*"
+            - name: JAVA_OPTION_SAS_COMMONS_WEB_SECURITY_CORS_ALLOWEDMETHODS
+              value: "-Dsas.commons.web.security.cors.allowedMethods=*"
           ports:
             - name: sas-http
               containerPort: 80
