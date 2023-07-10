@@ -15,8 +15,8 @@ imageCredentials:
   username:
   password:
 
-nameOverride: aou-rstudio
-fullnameOverride: aou-rstudio
+nameOverride: aou-sas
+fullnameOverride: aou-sas
 
 # Provided by Leonardo
 serviceAccount:
