@@ -27,6 +27,9 @@ license: ""
 # TLS and rewrite rules provided by Leonardo
 ingress:
   enabled: true
+  path:
+    sas:
+    welder:
   annotations:
   # nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
   # nginx.ingress.kubernetes.io/auth-tls-secret: "{{ $.Release.Namespace }}/ca-secret"

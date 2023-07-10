@@ -28,14 +28,14 @@ spec:
       http:
         paths:
           - pathType: ImplementationSpecific
-            path: /welder(/|$)(.*)
+            path: {{ .Values.ingress.path.welder }}
             backend:
               service:
                 name: {{ include "app.fullname" . }}-welder
                 port:
                   number: 8080
           - pathType: ImplementationSpecific
-            path: /sas(/|$)(.*)
+            path: {{ .Values.ingress.path.sas }}
             backend:
               service:
                 name: {{ include "app.fullname" . }}-sas
