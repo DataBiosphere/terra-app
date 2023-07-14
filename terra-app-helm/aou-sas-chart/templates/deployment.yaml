@@ -38,7 +38,7 @@ spec:
               - NET_ADMIN
           resources: {}
         - name: aou-sas
-          image: "cr.sas.com/viya-4-x64_oci_linux_2-docker/sas-analytics-pro:0.27.22-20230613.1686650274071"
+          image: "cr.sas.com/viya-4-x64_oci_linux_2-docker/sas-analytics-pro:0.27.24-20230707.1688767835039"
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0
@@ -50,6 +50,8 @@ spec:
               value: ""
             - name: SAS_DEBUG
               value: "0"
+            - name: PRE_DEPLOY_SCRIPT
+              value: 'sed -i "s/RequestHeader/#RequestHeader/g" /etc/httpd/conf.d/dkrapro-proxy.conf; echo ProxyPassReverseCookiePath /SASStudio /sas/SASStudio >> /etc/httpd/conf.d/dkrapro-proxy.conf; echo AddOutputFilterByType SUBSTITUTE text/html > /etc/httpd/conf.d/substitute.conf ; echo AddOutputFilterByType SUBSTITUTE text/css >> /etc/httpd/conf.d/substitute.conf; echo AddOutputFilterByType SUBSTITUTE application/x-javascript >> /etc/httpd/conf.d/substitute.conf; echo AddOutputFilterByType SUBSTITUTE application/javascript >> /etc/httpd/conf.d/substitute.conf;echo AddOutputFilterByType SUBSTITUTE text/xml >> /etc/httpd/conf.d/substitute.conf; echo Substitute "s|/SASStudio/|/sas/SASStudio/|n" >> /etc/httpd/conf.d/substitute.conf'
             - name: SETINIT_TEXT
               value: "{{ .Values.sasLicense }}"
             - name: JAVA_OPTION_SAS_COMMONS_WEB_SECURITY_CORS_ALLOWEDORIGINS
@@ -59,7 +61,9 @@ spec:
             - name: JAVA_OPTION_SAS_COMMONS_WEB_SECURITY_CORS_ALLOWEDHEADERS
               value: "-Dsas.commons.web.security.cors.allowedHeaders=*"
             - name: JAVA_OPTION_SAS_COMMONS_WEB_SECURITY_CORS_ALLOWEDMETHODS
-              value: "-Dsas.commons.web.security.cors.allowedMethods=*"
+              value: "-Dsas.commons.web.security.cors.allowedMethods=OPTIONS,POST,PUT,GET,DELETE,HEAD,PATCH"
+            - name: JAVA_OPTION_SAS_COMMONS_WEB_SECURITY_CSRF
+              value: "-Dsas.commons.web.security.csrf.enable-csrf=false"
           ports:
             - name: sas-http
               containerPort: 80
