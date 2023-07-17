@@ -1,0 +1,56 @@
+# Provided by the app descriptor
+image:
+  image: "gcr.io/cryptic-skyline-320001/terra-rstudio-aou:smoke-test-1"
+
+# Provided by Leonardo
+configs: {}
+
+# Provided by Leonardo
+extraEnv:
+# - name: WORKSPACE_NAME
+#   value: my-workspace
+
+imageCredentials:
+  registry: cr.sas.com
+  username:
+  password:
+
+nameOverride: aou-sas
+fullnameOverride: aou-sas
+
+# Provided by Leonardo
+serviceAccount:
+  name: ""
+
+license: ""
+
+# TLS and rewrite rules provided by Leonardo
+ingress:
+  enabled: true
+  path:
+    sas:
+    welder:
+  annotations:
+  hosts:
+    - host: "k8s.app.info"
+      paths:
+        - "/app(/|$)(.*)"
+  # tls:
+  # - secretName: "tls-secret"
+  #   hosts:
+  #     - "k8s.app.info"
+
+
+# Provided by Leonardo
+nodeSelector: {}
+# cloud.google.com/gke-nodepool: "nodepool-name"
+
+# either GCE PD provided by Leonardo; or hostPath provided by terra-docker-local.sh
+persistence:
+  size: 100G
+  gcePersistentDisk: "gke-sas-disk"
+
+welder:
+  extraEnv:
+  # - name: WORKSPACE_NAME
+  #   value: my-workspace
