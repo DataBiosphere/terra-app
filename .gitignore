@@ -3,3 +3,4 @@
 *.tmp
 terra-app-setup-chart/repo
 terra-app-chart/repo
+*.jwt
