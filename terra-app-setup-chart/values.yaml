@@ -6,7 +6,7 @@ serviceAccount:
     gcpServiceAccount:
 
 relaylistener:
-  image: terradevacrpublic.azurecr.io/terra-azure-relay-listeners:decc8b0
+  image: terradevacrpublic.azurecr.io/terra-azure-relay-listeners:40c1921
   port: 8080
   connectionString: RUNTIME_PARAMETER
   connectionName: RUNTIME_PARAMETER
