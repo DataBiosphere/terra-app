@@ -3,4 +3,5 @@
 *.tmp
 terra-app-setup-chart/repo
 terra-app-chart/repo
+terra-app-helm/aou-sas-chart/repo
 *.jwt
