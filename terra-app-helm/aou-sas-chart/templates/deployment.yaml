@@ -56,7 +56,7 @@ spec:
             - name: PRE_DEPLOY_SCRIPT
               value: |
                 sed -i "s/RequestHeader/#RequestHeader/g" /etc/httpd/conf.d/dkrapro-proxy.conf;
-                echo ProxyPassReverseCookiePath /SASStudio /"{{ .Values.ingress.proxyPath }}"/SASStudio >> /etc/httpd/conf.d/dkrapro-proxy.conf; 
+                echo ProxyPassReverseCookiePath /SASStudio "{{ .Values.ingress.proxyPath }}"/SASStudio >> /etc/httpd/conf.d/dkrapro-proxy.conf; 
                 echo AddOutputFilterByType SUBSTITUTE text/html > /etc/httpd/conf.d/substitute.conf; 
                 echo AddOutputFilterByType SUBSTITUTE text/css >> /etc/httpd/conf.d/substitute.conf; 
                 echo AddOutputFilterByType SUBSTITUTE application/x-javascript >> /etc/httpd/conf.d/substitute.conf; 

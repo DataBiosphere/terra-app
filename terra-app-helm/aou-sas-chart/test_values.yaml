@@ -10,6 +10,7 @@ serviceAccount:
 # TLS and rewrite rules provided by Leonardo
 ingress:
   enabled: true
+  proxyPath: "/sas"
   path:
     sas: "/sas(/|$)(.*)"
     welder: "/welder(/|$)(.*)"
