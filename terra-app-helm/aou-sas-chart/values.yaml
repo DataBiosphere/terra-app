@@ -5,6 +5,10 @@ image:
 # Provided by Leonardo
 configs: {}
 
+service:
+  type: ClusterIP
+  port: 80
+
 # Provided by Leonardo
 extraEnv:
 # - name: WORKSPACE_NAME
@@ -27,6 +31,7 @@ license: ""
 # TLS and rewrite rules provided by Leonardo
 ingress:
   enabled: true
+  proxyPath:
   path:
     sas:
     welder:

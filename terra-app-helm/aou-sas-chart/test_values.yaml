@@ -7,13 +7,10 @@ configs: {}
 serviceAccount:
   name: "test-service-account"
 
-service:
-  type: ClusterIP
-  port: 80
-
 # TLS and rewrite rules provided by Leonardo
 ingress:
   enabled: true
+  proxyPath: "/sas"
   path:
     sas: "/sas(/|$)(.*)"
     welder: "/welder(/|$)(.*)"
