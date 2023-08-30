@@ -32,6 +32,7 @@ license: ""
 ingress:
   enabled: true
   proxyPath:
+  referer:
   path:
     sas:
     welder:

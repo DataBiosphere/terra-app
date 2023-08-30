@@ -14,6 +14,7 @@ ingress:
   path:
     sas: "/sas(/|$)(.*)"
     welder: "/welder(/|$)(.*)"
+  referer: ""
   annotations:
 #   nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
 #   nginx.ingress.kubernetes.io/auth-tls-secret: "{{ $.Release.Namespace }}/ca-secret"
