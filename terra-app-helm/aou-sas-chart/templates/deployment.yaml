@@ -77,7 +77,7 @@ spec:
             - name: JAVA_OPTION_SAS_COMMONS_WEB_SECURITY_CSRF
               value: "-Dsas.commons.web.security.csrf.enable-csrf=false"
             - name: JAVA_OPTION_SAS_COMMONS_WEB_SECURITY_CSRF_ALLOWEDURIS
-              value: "-Dsas.commons.web.security.csrf.allowedUris="{{ .Values.ingress.referer }}""
+              value: "-Dsas.commons.web.security.csrf.allowedUris={{ .Values.ingress.referer }}"
           ports:
             - name: sas-http
               containerPort: 80
