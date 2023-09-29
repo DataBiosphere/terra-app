@@ -63,7 +63,8 @@ spec:
                 echo AddOutputFilterByType SUBSTITUTE application/javascript >> /etc/httpd/conf.d/substitute.conf;
                 echo AddOutputFilterByType SUBSTITUTE text/xml >> /etc/httpd/conf.d/substitute.conf; 
                 echo Substitute "s|/SASStudio/|"{{ .Values.ingress.proxyPath }}"/SASStudio/|n" >> /etc/httpd/conf.d/substitute.conf; 
-                useradd -m -d /data -g sas -s /bin/bash aou; echo "aou:aou" | chpasswd
+                useradd -m -d /data -g sas -s /bin/bash aou; echo "aou:aou" | chpasswd;
+                chmod -R g+rwx /data
             - name: SASLICENSEFILE
               value: SASLicense.jwt
             - name: JAVA_OPTION_SAS_COMMONS_WEB_SECURITY_CORS_ALLOWEDORIGINS
