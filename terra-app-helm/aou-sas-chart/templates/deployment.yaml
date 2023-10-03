@@ -67,6 +67,8 @@ spec:
                 chmod -R g+rwx /data
             - name: SASLICENSEFILE
               value: SASLicense.jwt
+            - name: GOMEMLIMIT
+              value: 20MiB
             - name: JAVA_OPTION_SAS_COMMONS_WEB_SECURITY_CORS_ALLOWEDORIGINS
               value: "-Dsas.commons.web.security.cors.allowedOrigins=*"
             - name: JAVA_OPTION_SAS_COMMONS_WEB_SECURITY_CORS_ALLOWCREDENTIALS
