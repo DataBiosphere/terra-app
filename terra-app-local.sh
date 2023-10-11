@@ -26,9 +26,9 @@ Usage:
 Available commands:
   install       installs an app
   uninstall     deletes an app
-  status        displays stats about an app
-  list          lists all apps
-  show-kubectl  prints kubectl commands to interact with an app
+  status        displays stats about an app (not yet implemented)
+  list          lists all apps (not yet implemented)
+  show-kubectl  prints kubectl commands to interact with an app (not yet implemented)
 
 Flags:
   -h, --help    display help
@@ -130,7 +130,7 @@ install_nginx() {
     if ! kubectl get ns | grep -q nginx; then
         kubectl create namespace nginx
     fi
-    
+
     # check if we need to add the nginx helm repo
     if ! helm show chart ingress-nginx/ingress-nginx --version=3.23.0 >/dev/null 2>&1; then
         helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx --force-update > /dev/null
@@ -149,7 +149,7 @@ install_app() {
     # read args
     local _filename="$1"
     local _extraargs="$2"
-   
+
     # parse information out of the descriptor
     _appname=$(yq e '.name' "${_filename}")
     # Do not change this namespace convention without modifying the github action
@@ -157,19 +157,19 @@ install_app() {
     local _ksa="${_appname}-ksa"
     local _baseurl=$(yq e '.services.*.baseUrl' "${_filename}")
     if [ -z "${_baseurl}" ] | [ "${_baseurl}" == "null" ]; then
-        local _ingresspath="/${_appname}(/|$)(.*)"       
+        local _ingresspath="/${_appname}(/|$)(.*)"
     else
-        local _ingresspath="${_baseurl}" 
+        local _ingresspath="${_baseurl}"
     fi
     _hostname=$(jq -r .hostname < ci-config.json)
-    
+
     if [ -z "${_appname}" ] | [ "${_appname}" == "null" ] ; then
         echo "Error: could not parse app name from file '${_filename}'."
         exit 1
     fi
 
     echo "Installing '${_appname}' from descriptor file '${_filename}'..."
- 
+
     # create the namespace if it doesn't already exist
     if ! kubectl get ns | grep -q "${_namespace}"; then
         kubectl create namespace "${_namespace}"
@@ -184,8 +184,8 @@ install_app() {
 
     echo "Service account created"
 
-    # build values yaml from app descriptor 
-    # TODO note this supports at most 3 EVs; there is probably a nicer way but 
+    # build values yaml from app descriptor
+    # TODO note this supports at most 3 EVs; there is probably a nicer way but
     # I couldn't figure out how to make yq map over keys.
     local _tmp_values="$(date +%s)-temp.tmp"
     touch "${_tmp_values}"
@@ -212,7 +212,7 @@ install_app() {
     for a in "${_extraargs[@]}"; do
         yq e -i ".image.args += \"$a\"" "${_tmp_values}"
     done
-   
+
     # apply proxy redirect rules if baseUrl is not specified by the app
     if [ -z "${_baseurl}" ] | [ "${_baseurl}" == "null" ]; then
         yq e -i \
@@ -226,7 +226,7 @@ install_app() {
     #echo ""
 
     echo "Preparing for helm install..."
-    
+
     # install the app
     helm upgrade --install -n "${_namespace}" \
       "${_appname}" \
@@ -236,10 +236,61 @@ install_app() {
     rm "${_tmp_values}"
 }
 
+uninstall() {
+    if [ -z "$1" ]; then
+        uninstall_usage
+        exit 0
+    fi
+
+    while [ "$1" != "" ]; do
+        case "$1" in
+            -f | --filename)
+                shift
+                local _filename=$1
+                ;;
+            -h | --help)
+                uninstall_usage
+                exit 0
+                ;;
+            *)
+                echo "Unrecognized argument '${1}'."
+                echo "Run '${progname} uninstall --help' to see available arguments."
+                exit 1
+                ;;
+        esac
+        shift
+    done
+
+    # Parse app name out of the descriptor:
+    local _appname=$(yq e '.name' "${_filename}")
+    # Apply the standard convention to get the namespace:
+    local _namespace="${_appname}-ns"
+
+    # Uninstall the helm chart:
+    helm uninstall -n "${_namespace}" "${_appname}"
+    # Delete the namespace from the minikube cluster:
+    kubectl delete ns "${_namespace}"
+}
+
+uninstall_usage() {
+    cat <<USAGEEOF
+Uninstall an app from a locally running minikube cluster.
+
+ For more information about configuring minikube, see: https://github.com/DataBiosphere/terra-app
+
+Usage:
+  ${progname} uninstall -f [filename]
+
+Flags:
+  -f, --filename  path to the app descriptor file
+  -h, --help      display this help message
+USAGEEOF
+}
+
 main() {
     local _subcmd
     local _subcmd_args
-    
+
     if [ -z "$1" ]; then
         usage
         exit 0
@@ -247,12 +298,22 @@ main() {
 
     while [ "$1" != "" ]; do
         case "$1" in
-            install | uninstall | status | list | show-kubectl)
-                _subcmd="$1"
+            install)
                 shift
                 _subcmd_args=("$@")
-                break;;
-                
+                install "${_subcmd_args[@]}"
+                break
+                ;;
+            uninstall)
+                shift
+                _subcmd_args=("$@")
+                uninstall "${_subcmd_args[@]}"
+                break
+                ;;
+            status | list | show-kubectl)
+                echo "Command ${1} is not yet implemented. Perhaps you would like to submit a pull request to implement it?"
+                break
+                ;;
             -h | --help)
                 usage
                 exit 0;;
@@ -265,16 +326,8 @@ main() {
         esac
         shift
     done
-
-    if [ "${_subcmd}" == "install" ]; then
-        install "${_subcmd_args[@]}"
-    else
-        echo "Unrecognized command '${_subcmd}'."
-        echo "Run '${progname} --help' to see available arguments."
-        exit 1
-    fi
 }
-        
+
 ###
 ### Main
 ###
