@@ -50,3 +50,5 @@ welder:
   #   value: "dummy"
   # - name: OWNER_EMAIL
   #   value: "dummy"
+
+replicaCount: 1
