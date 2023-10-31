@@ -60,3 +60,5 @@ welder:
   extraEnv:
   # - name: WORKSPACE_NAME
   #   value: my-workspace
+
+replicaCount: 1
