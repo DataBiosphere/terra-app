@@ -1,0 +1,28 @@
+name: publish-terra-app-helm-charts
+on:
+  workflow_dispatch:
+    inputs:
+      chart-name:
+        description: 'Name for the chart. Valid values: aou-rstudio-chart, aou-sas-chart'
+        required: true
+        type: string
+
+jobs:
+  update-and-publish:
+    name: Publish new charts in terra-app-helm directory
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.BROADBOT_TOKEN }} # Has to be set at checkout AND later when pushing to work
+
+      - name: Find out next chart version
+        run: |
+          currentVersion=$(grep '^version:' terra-app-helm/${{ inputs.chart-name }}/Chart.yaml | awk '{print $NF}')
+
+          echo "CURRENT_VERSION=$currentVersion" >> $GITHUB_ENV
+
+      - name: Publish the new helm chart and update index.yaml
+        run: |
+          ./terra-app-helm/publish.sh ${{ inputs.chart-name }} $CURRENT_VERSION
