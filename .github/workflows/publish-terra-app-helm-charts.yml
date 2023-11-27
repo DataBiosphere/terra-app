@@ -15,11 +15,6 @@ jobs:
     name: Publish new charts in terra-app-helm directory
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the repository
-        uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.BROADBOT_TOKEN }} # Has to be set at checkout AND later when pushing to work
-
       - name: Find out next chart version
         run: |
           currentVersion=$(grep '^version:' terra-app-helm/${{ inputs.chart-name }}/Chart.yaml | awk '{print $NF}')
