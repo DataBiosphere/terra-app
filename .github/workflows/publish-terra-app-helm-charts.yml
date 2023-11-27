@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       chart-name:
-        description: 'Name for the chart. Valid values: aou-rstudio-chart, aou-sas-chart'
+        description: 'Name for the chart. Valid values: aou-rstudio-chart, aou-sas-chart.'
         required: true
         type: string
 
