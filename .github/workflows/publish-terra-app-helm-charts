@@ -1,5 +1,8 @@
 name: publish-terra-app-helm-charts
 on:
+  push:
+    branches:
+      - 'publishChart'
   workflow_dispatch:
     inputs:
       chart-name:
