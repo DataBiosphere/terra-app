@@ -81,6 +81,8 @@ spec:
               value: "-Dsas.commons.web.security.csrf.enable-csrf=false"
             - name: JAVA_OPTION_SAS_COMMONS_WEB_SECURITY_CSRF_ALLOWEDURIS
               value: "-Dsas.commons.web.security.csrf.allowedUris={{ .Values.ingress.referer }}"
+            - name: JAVA_OPTION_SAS_COMMONS_WEB_SECURITY_COOKIES_SAMESITE_NONE
+              value: "-Dsas.commons.web.security.cookies.sameSite=None"
             - name: JAVA_OPTION_SAS_STUDIO_BASICUSER
               value: -Dsas.studio.basicUser=aou
             - name: JAVA_OPTION_SAS_STUDIO_BASICPASSWORD
