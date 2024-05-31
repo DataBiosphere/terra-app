@@ -10,7 +10,7 @@ services:
     baseUrl: "/jupyter/"
     # inject a sed command to make the app listen on /jupyter instead of /notebooks
     command:  ["/bin/sh", "-c"]
-    args: ["sed -i '/^# to mount there as it effectively deletes existing files on the image/,+5d' $JUPYTER_HOME/jupyter_notebook_config.py ; /usr/local/bin/jupyter notebook"]
+    args: ["sed -i 's/\\/notebooks/\\/jupyter/' $JUPYTER_HOME/jupyter_notebook_config.py ; /usr/local/bin/jupyter notebook"]
     pdMountPath: "/data"
     pdAccessMode: "ReadWriteOnce"
     environment:
